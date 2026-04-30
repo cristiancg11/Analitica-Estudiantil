@@ -1,0 +1,39 @@
+<div class="dashboard-page">
+  <div class="dashboard-container fade-in">
+    
+    <header class="dashboard-header">
+      <button class="back-button" (click)="goToHome()">
+        <span class="icon">←</span> Volver al inicio
+      </button>
+      
+      <div class="header-text">
+        <h1 class="dashboard-title">Dashboard Analítico de Deserción Estudiantil</h1>
+        <p class="dashboard-description">
+          Este tablero interactivo consolida información demográfica, académica y socioeconómica para identificar patrones de abandono estudiantil en Colombia. Utilice los filtros para explorar cohortes específicas, analizar tasas de retención por facultad y descubrir factores de riesgo que permitan diseñar intervenciones oportunas y eficaces.
+        </p>
+      </div>
+    </header>
+
+    <main class="dashboard-content">
+      <div class="iframe-card">
+        
+        @if(isLoading) {
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Cargando dashboard de Power BI...</p>
+          </div>
+        }
+
+        <iframe 
+          [src]="url" 
+          (load)="onIframeLoad()"
+          [class.visible]="!isLoading"
+          class="powerbi-iframe"
+          frameborder="0" 
+          allowFullScreen="true">
+        </iframe>
+      </div>
+    </main>
+
+  </div>
+</div>
