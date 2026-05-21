@@ -257,6 +257,44 @@
     </div>
   </section>
 
+  <section class="summary-tables-section" aria-label="Resultados Estadísticos ANOVA y Post-test">
+    <div class="section-label">Resultados Estadísticos <small>ANOVA y Post-test</small></div>
+
+    @if (statsLoading) {
+      <div class="table-note-simple">Cargando resultados estadísticos...</div>
+    }
+
+    <div class="summary-tables-grid">
+      <div class="summary-table-card" *ngFor="let card of statsCards">
+        <div class="card-header-simple">
+          <h3>{{ card.title }}</h3>
+          <span class="card-desc-simple">{{ card.desc }}</span>
+        </div>
+
+        @if (card.error) {
+          <div class="table-note-simple">No se pudo cargar el archivo: {{ card.error }}</div>
+        } @else {
+          <div class="table-wrapper-simple" *ngIf="card.table">
+            <table>
+              <thead>
+                <tr>
+                  <th *ngFor="let h of card.table.headers">{{ h }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of card.table.rows">
+                  <td *ngFor="let cell of row" [ngClass]="cellClass(cell)">
+                    {{ formatCell(cell) }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
   <!-- INFO GUIDE SECTION -->
   <section class="guide-section">
     <div class="guide-grid">

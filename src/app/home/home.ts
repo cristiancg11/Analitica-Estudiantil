@@ -13,6 +13,15 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   url!: SafeResourceUrl;
   isLoading = true;
 
+  statsLoading = true;
+  statsCards: Array<{
+    title: string;
+    desc: string;
+    path: string;
+    table?: { headers: string[]; rows: string[][] };
+    error?: string;
+  }> = [];
+
   // Chart instances
   chartFacultad: Chart | null = null;
   chartNivel: Chart | null = null;
@@ -23,6 +32,35 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     const powerBiUrl = 'https://app.powerbi.com/view?r=eyJrIjoiY2IwM2NlNTgtZjViNy00OTlhLWJlMTctNjM5MGRiMGRmODlkIiwidCI6IjhkMzY4MzZlLTZiNzUtNGRlNi1iYWI5LTVmNGIxNzc1NDI3ZiIsImMiOjR9';
     this.url = this.sanitizer.bypassSecurityTrustResourceUrl(powerBiUrl);
+
+    this.statsCards = [
+      {
+        title: 'ANOVA — Matriculados (UNAL vs UNIVALLE)',
+        desc: 'Prueba F (una vía) por institución',
+        path: '/estadistica/anova_matriculados_unal_vs_univalle.csv',
+      },
+      {
+        title: 'Post-test — Tukey HSD (Matriculados)',
+        desc: 'Comparaciones múltiples entre instituciones',
+        path: '/estadistica/tukey_matriculados_unal_vs_univalle.csv',
+      },
+      {
+        title: 'ANOVA — Graduados (UNAL vs UNIVALLE)',
+        desc: 'Prueba F (una vía) por institución',
+        path: '/estadistica/anova_graduados_unal_vs_univalle.csv',
+      },
+      {
+        title: 'Post-test — Tukey HSD (Graduados)',
+        desc: 'Comparaciones múltiples entre instituciones',
+        path: '/estadistica/tukey_graduados_unal_vs_univalle.csv',
+      },
+      {
+        title: 'ANOVA General — Total Estudiantes',
+        desc: 'Modelo OLS: C(periodo) + C(nivelgral)',
+        path: '/estadistica/anova_total_estudiantes.csv',
+      },
+    ];
+    this.loadStatsCards();
   }
 
   ngAfterViewInit() {
@@ -209,5 +247,93 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.chartSexo.destroy();
       this.chartSexo = null;
     }
+  }
+
+  async loadStatsCards() {
+    this.statsLoading = true;
+    await Promise.all(
+      this.statsCards.map(async (card) => {
+        try {
+          card.table = await this.loadCsvTable(card.path);
+          card.error = undefined;
+        } catch (e) {
+          card.table = undefined;
+          card.error = e instanceof Error ? e.message : String(e);
+        }
+      })
+    );
+    this.statsLoading = false;
+  }
+
+  formatCell(value: string) {
+    const raw = (value ?? '').trim();
+    if (!raw) return '';
+
+    const n = Number(raw);
+    if (!Number.isFinite(n)) return raw;
+
+    if (Math.abs(n) < 0.001 && n !== 0) return n.toExponential(3);
+
+    return n.toLocaleString('es-CO', { maximumFractionDigits: 6 });
+  }
+
+  cellClass(value: string) {
+    const raw = (value ?? '').trim().toLowerCase();
+    if (raw === 'true') return 'text-green font-mono';
+    if (raw === 'false') return 'text-red font-mono';
+    return '';
+  }
+
+  private async loadCsvTable(path: string) {
+    const res = await fetch(path);
+    if (!res.ok) throw new Error(`No se pudo cargar ${path} (${res.status})`);
+
+    const text = await res.text();
+    return this.parseCsv(text);
+  }
+
+  private parseCsv(text: string) {
+    const lines = text
+      .replace(/\r\n/g, '\n')
+      .replace(/\r/g, '\n')
+      .split('\n')
+      .map((l) => l.trim())
+      .filter((l) => l.length > 0);
+
+    if (lines.length === 0) return { headers: [], rows: [] };
+
+    const headers = this.parseCsvLine(lines[0]);
+    const rows = lines.slice(1).map((l) => this.parseCsvLine(l));
+    return { headers, rows };
+  }
+
+  private parseCsvLine(line: string) {
+    const out: string[] = [];
+    let cur = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+
+      if (ch === '"') {
+        if (inQuotes && line[i + 1] === '"') {
+          cur += '"';
+          i++;
+          continue;
+        }
+        inQuotes = !inQuotes;
+        continue;
+      }
+
+      if (ch === ',' && !inQuotes) {
+        out.push(cur);
+        cur = '';
+        continue;
+      }
+
+      cur += ch;
+    }
+    out.push(cur);
+    return out.map((v) => v.trim());
   }
 }
