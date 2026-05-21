@@ -1,153 +1,174 @@
-<div class="home-page">
-  
-  <!-- Hero Section -->
-  <section class="hero-container">
-    <div class="content-grid">
-      <!-- Left Column: Hero Text & CTA -->
-      <div class="hero-section">
-        <div class="badge-wrapper">
-          <span class="badge">
-            <span class="pulse-dot"></span>
-            Sistema de Monitoreo Activo
-          </span>
-        </div>
-        
-        <h1 class="main-title">
-          Análisis de Deserción <br/>
-          <span class="highlight">Estudiantil</span>
-        </h1>
-        
-        <p class="hero-description">
-          Descubre los factores clave que impactan la retención académica.
-          Nuestra plataforma de analítica avanzada transforma los datos en 
-          decisiones estratégicas para asegurar el éxito de cada estudiante.
-        </p>
+<div class="home-page fade-in">
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-accent"></div>
+    <div class="hero-eyebrow">Análisis de deserción estudiantil</div>
+    <h1 class="hero-title">DESERCIÓN<br><em>EN LA UNAL</em></h1>
+    <p class="hero-desc">
+      Plataforma de analítica avanzada que procesa 584,334 registros de matrícula (2018–2023) 
+      para identificar patrones, evaluar factores socioeconómicos y diseñar estrategias de retención 
+      basadas en evidencia para la Universidad Nacional de Colombia.
+    </p>
+    <div class="hero-cta-wrapper">
+      <button class="cta-button" (click)="goToDashboard()">
+        Acceder al Dashboard
+        <span class="cta-icon">→</span>
+      </button>
+    </div>
+  </section>
 
-
+  <!-- KPI STRIP -->
+  <section class="kpi-section" aria-label="Indicadores Clave">
+    <div class="kpi-strip">
+      <div class="kpi">
+        <div class="kpi-top-bar" style="background: var(--red)"></div>
+        <div class="kpi-label">Total registros</div>
+        <div class="kpi-value">584K</div>
+        <div class="kpi-sub">2018 – 2023</div>
+        <div class="kpi-badge badge-red">+30% vs 2019</div>
       </div>
-
-      <!-- Right Column: KPI Cards -->
-      <div class="kpis-section">
-        <div class="kpi-grid">
-          <div class="kpi-card slide-up-1">
-            <div class="kpi-icon blue">👥</div>
-            <div class="kpi-content">
-              <h4 class="kpi-label">Total Registros</h4>
-              <div class="kpi-value">584,000</div>
-              <div class="kpi-trend positive"></div>
-            </div>
-          </div>
-
-          <div class="kpi-card slide-up-2">
-            <div class="kpi-icon red">⚠️</div>
-            <div class="kpi-content">
-              <h4 class="kpi-label">Tasa de Deserción</h4>
-              <div class="kpi-value">90.7%</div>
-              <div class="kpi-trend negative"></div>
-            </div>
-          </div>
-
-          <div class="kpi-card slide-up-3">
-            <div class="kpi-icon green">🎓</div>
-            <div class="kpi-content">
-              <h4 class="kpi-label">Estudiantes Graduados</h4>
-              <div class="kpi-value">50,000</div>
-              <div class="kpi-trend positive"></div>
-            </div>
-          </div>
-        </div>
+      
+      <div class="kpi">
+        <div class="kpi-top-bar" style="background: var(--amber)"></div>
+        <div class="kpi-label">Pregrado</div>
+        <div class="kpi-value">489K</div>
+        <div class="kpi-sub">83.8% del total</div>
+        <div class="kpi-badge badge-red">Mayor riesgo</div>
+      </div>
+      
+      <div class="kpi">
+        <div class="kpi-top-bar" style="background: var(--blue)"></div>
+        <div class="kpi-label">Sedes</div>
+        <div class="kpi-value">9</div>
+        <div class="kpi-sub">Bogotá lidera 59%</div>
+        <div class="kpi-badge badge-blue">Nacional</div>
+      </div>
+      
+      <div class="kpi">
+        <div class="kpi-top-bar" style="background: var(--purple)"></div>
+        <div class="kpi-label">Brecha género</div>
+        <div class="kpi-value">61/39</div>
+        <div class="kpi-sub">Hombres / Mujeres</div>
+        <div class="kpi-badge badge-red">Alta desigualdad</div>
+      </div>
+      
+      <div class="kpi">
+        <div class="kpi-top-bar" style="background: var(--teal)"></div>
+        <div class="kpi-label">Estrato vulnerable</div>
+        <div class="kpi-value">48.5%</div>
+        <div class="kpi-sub">Estratos 1 y 2</div>
+        <div class="kpi-badge badge-red">Mayor riesgo</div>
+      </div>
+      
+      <div class="kpi">
+        <div class="kpi-top-bar" style="background: var(--green)"></div>
+        <div class="kpi-label">Edad predominante</div>
+        <div class="kpi-value">20–24</div>
+        <div class="kpi-sub">48% de estudiantes</div>
+        <div class="kpi-badge badge-green">Foco de atención</div>
       </div>
     </div>
   </section>
 
-  <!-- Context Section -->
+  <!-- CONTEXT SECTION -->
   <section class="context-section">
-    <div class="section-container">
-      <div class="section-header center">
-        <h2 class="section-title">Contexto de la Deserción en la UNAL</h2>
-        <p class="section-subtitle">
-          La deserción estudiantil en la Universidad Nacional de Colombia (UNAL) representa un desafío fundamental. Comprender sus dinámicas en las distintas sedes y facultades es vital para fortalecer el acompañamiento académico y asegurar la permanencia de los estudiantes.
+    <div class="section-label">Contexto del Fenómeno <small>Desafío institucional en educación superior</small></div>
+    <p class="section-lead-text">
+      La deserción estudiantil en la Universidad Nacional de Colombia representa un reto multidimensional.
+      Comprender sus dinámicas en las distintas sedes y facultades es fundamental para fortalecer el 
+      acompañamiento institucional y asegurar la permanencia.
+    </p>
+
+    <div class="cards-grid">
+      <div class="info-card">
+        <div class="card-icon red-bg">📉</div>
+        <h3 class="card-title">Deserción Institucional</h3>
+        <p class="card-text">
+          La alta tasa acumulada de desvinculación refleja la complejidad de factores que influyen en que 
+          los estudiantes pausen o abandonen sus programas académicos.
         </p>
       </div>
 
-      <div class="cards-grid">
-        <div class="info-card fade-in-scroll">
-          <div class="card-icon-wrapper">
-            <div class="card-icon red-bg">📉</div>
-          </div>
-          <h3>Deserción Institucional</h3>
-          <p>La alta tasa estimada refleja la complejidad de factores que influyen en que los estudiantes de la <strong>UNAL</strong> pausen o abandonen sus programas académicos.</p>
-        </div>
-        
-        <div class="info-card fade-in-scroll" style="animation-delay: 0.2s;">
-          <div class="card-icon-wrapper">
-            <div class="card-icon yellow-bg">💰</div>
-          </div>
-          <h3>Impacto Socioeconómico</h3>
-          <p>Las principales causas de abandono están relacionadas con <strong>dificultades económicas</strong>, falta de orientación vocacional y deficiencias en la preparación académica previa.</p>
-        </div>
-        
-        <div class="info-card fade-in-scroll" style="animation-delay: 0.4s;">
-          <div class="card-icon-wrapper">
-            <div class="card-icon blue-bg">🌍</div>
-          </div>
-          <h3>Brecha de Equidad</h3>
-          <p>La deserción afecta desproporcionadamente a estudiantes de <strong>estratos 1 y 2</strong>, perpetuando los ciclos de pobreza y limitando la movilidad social.</p>
-        </div>
+      <div class="info-card">
+        <div class="card-icon amber-bg">💰</div>
+        <h3 class="card-title">Impacto Socioeconómico</h3>
+        <p class="card-text">
+          Las principales causas están asociadas a dificultades financieras, vulnerabilidades familiares, 
+          falta de orientación vocacional previa y retos en la adaptación universitaria.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <div class="card-icon blue-bg">🌍</div>
+        <h3 class="card-title">Brecha de Equidad</h3>
+        <p class="card-text">
+          El fenómeno afecta con mayor fuerza a estudiantes de estratos socioeconómicos 1 y 2, 
+          quienes requieren de un esquema robusto de bienestar estudiantil y apoyos económicos.
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- Importance Section -->
+  <!-- IMPORTANCE & BENEFITS SECTION -->
   <section class="importance-section">
-    <div class="section-container">
-      <div class="importance-grid">
-        <div class="importance-text">
-          <h2 class="section-title">¿Por qué es importante este análisis?</h2>
-          <p class="section-description">
-            Entender los datos detrás de la deserción es el primer paso para combatirla. Nuestro dashboard analítico procesa miles de registros para transformar datos crudos en <strong>insights accionables</strong> que guían la toma de decisiones.
-          </p>
-          
-          <ul class="benefits-list">
-            <li>
-              <div class="benefit-icon">🎯</div>
-              <div class="benefit-content">
-                <strong>Intervención Temprana</strong>
-                <span>Permite identificar estudiantes en riesgo antes de que abandonen sus estudios.</span>
-              </div>
-            </li>
-            <li>
-              <div class="benefit-icon">💡</div>
-              <div class="benefit-content">
-                <strong>Políticas Efectivas</strong>
-                <span>Ayuda a las instituciones a diseñar estrategias de retención basadas en evidencia y no en suposiciones.</span>
-              </div>
-            </li>
-            <li>
-              <div class="benefit-icon">📈</div>
-              <div class="benefit-content">
-                <strong>Optimización de Recursos</strong>
-                <span>Dirige los apoyos financieros y académicos a quienes más lo necesitan, maximizando el impacto institucional.</span>
-              </div>
-            </li>
-          </ul>
-        </div>
+    <div class="section-label">Importancia del Análisis <small>De los datos a la toma de decisiones estratégicas</small></div>
+    <div class="importance-grid">
+      <div class="importance-text">
+        <p class="section-description">
+          Identificar y caracterizar la población estudiantil permite a los comités académicos diseñar 
+          estrategias preventivas basadas en evidencia cuantitativa estructurada.
+        </p>
         
-        <div class="importance-visual">
-          <div class="visual-card">
-            <div class="visual-bg"></div>
-            <div class="visual-content">
-              <div class="big-icon">📊</div>
-              <h3>De los datos a la acción</h3>
-              <p>Transformamos estadísticas en estrategias de retención estudiantil.</p>
-              <button class="secondary-button" (click)="goToDashboard()">
-                Ver métricas ahora
-              </button>
+        <ul class="benefits-list">
+          <li class="benefit-item">
+            <span class="benefit-bullet">🎯</span>
+            <div class="benefit-body">
+              <h4 class="benefit-title">Intervención Temprana</h4>
+              <p class="benefit-desc">Establecer sistemas de alerta temprana basados en el historial académico y la procedencia.</p>
             </div>
+          </li>
+          <li class="benefit-item">
+            <span class="benefit-bullet">💡</span>
+            <div class="benefit-body">
+              <h4 class="benefit-title">Políticas Efectivas de Bienestar</h4>
+              <p class="benefit-desc">Asignar subsidios de transporte, alimentación y alojamiento a los núcleos de mayor riesgo.</p>
+            </div>
+          </li>
+          <li class="benefit-item">
+            <span class="benefit-bullet">📈</span>
+            <div class="benefit-body">
+              <h4 class="benefit-title">Optimización Curricular</h4>
+              <p class="benefit-desc">Revisar los cuellos de botella en asignaturas críticas del ciclo básico que incrementan la deserción.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="importance-visual">
+        <div class="visual-card">
+          <div class="visual-glow"></div>
+          <div class="visual-content">
+            <span class="visual-icon">📊</span>
+            <h3 class="visual-title">Visualización Interactiva</h3>
+            <p class="visual-desc">Explora el reporte oficial de Power BI consolidado con filtros interactivos.</p>
+            <button class="secondary-button" (click)="goToDashboard()">
+              Ver Dashboard Interactivo
+            </button>
           </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- FOOTER -->
+  <footer class="home-footer">
+    <div class="footer-left">
+      <span>UNIVERSIDAD NACIONAL DE COLOMBIA</span>
+      <span class="divider">|</span>
+      <span>DASHBOARD ANALÍTICO DE DESERCIÓN</span>
+    </div>
+    <div class="footer-right">
+      <span>SNIES · 2026</span>
+    </div>
+  </footer>
 </div>

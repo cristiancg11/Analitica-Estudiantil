@@ -1,0 +1,79 @@
+anio,universidad,estado_estudiante,programa,facultad,nivel,estrato,sexo,departamento,cantidad_real,_dataset_id,_dataset_nombre,tipoestudiante
+2018,UNAL,Graduado,Animación,Artes,Especialización,Sin información,Hombres,"BOGOTÁ, D. C.",1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Diseño y desarrollo del producto,Artes,Especialización,Sin información,Mujeres,"BOGOTÁ, D. C.",1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Diseño y desarrollo del producto,Artes,Especialización,Sin información,Hombres,"BOGOTÁ, D. C.",1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Diseño y desarrollo del producto,Artes,Especialización,Sin información,Hombres,BOYACÁ,1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Diseño y desarrollo del producto,Artes,Especialización,Sin información,Hombres,"BOGOTÁ, D. C.",1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Estudios amazónicos,Amazonia,Especialización,Sin información,Hombres,ANTIOQUIA,1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Estudios amazónicos,Amazonia,Maestría,Sin información,Hombres,"BOGOTÁ, D. C.",1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Pedagogía del diseño,Artes,Especialización,Sin información,Hombres,"BOGOTÁ, D. C.",1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Pedagogía del diseño,Artes,Especialización,Sin información,Hombres,BOYACÁ,1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Pedagogía del diseño,Artes,Especialización,Sin información,Mujeres,"BOGOTÁ, D. C.",1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Pedagogía del diseño,Artes,Especialización,Sin información,Hombres,"BOGOTÁ, D. C.",1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Pedagogía del diseño,Artes,Especialización,Sin información,Hombres,CAQUETÁ,1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Pedagogía del diseño,Artes,Especialización,Sin información,Hombres,CUNDINAMARCA,1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Pedagogía del diseño,Artes,Especialización,Sin información,Hombres,"BOGOTÁ, D. C.",1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Pedagogía del diseño,Artes,Especialización,Sin información,Hombres,"BOGOTÁ, D. C.",1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Pedagogía del diseño,Artes,Especialización,Sin información,Hombres,"BOGOTÁ, D. C.",1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Pedagogía del diseño,Artes,Especialización,Sin información,Mujeres,"BOGOTÁ, D. C.",1,3j5e-x7c4,graduados_unal,
+2018,UNAL,Graduado,Pedagogía del diseño,Artes,Especialización,Sin información,Hombres,ANTIOQUIA,1,3j5e-x7c4,graduados_unal,
+2019,UNAL,Matriculado,Derecho,"Derecho, ciencias políticas y sociales",Pregrado,Estrato 4,Mujeres,CUNDINAMARCA,1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Derecho,"Derecho, ciencias políticas y sociales",Pregrado,Estrato 3,Hombres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Economía,Ciencias económicas,Pregrado,Estrato 2,Hombres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Economía,Ciencias económicas,Pregrado,Estrato 3,Mujeres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Ingeniería agrícola,Ingeniería,Pregrado,Estrato 3,Hombres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Ingeniería agrícola,Ingeniería,Pregrado,Estrato 2,Mujeres,META,1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Ingeniería civil,Ingeniería,Pregrado,Estrato 3,Mujeres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Ingeniería de sistemas y computación,Ingeniería,Pregrado,Estrato 3,Hombres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Ingeniería de sistemas y computación,Ingeniería,Pregrado,Estrato 3,Hombres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Ingeniería de sistemas y computación,Ingeniería,Pregrado,Estrato 3,Hombres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Ingeniería electrónica,Ingeniería,Pregrado,Estrato 4,Mujeres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Ingeniería eléctrica,Ingeniería,Pregrado,Estrato 2,Hombres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Ingeniería eléctrica,Ingeniería,Pregrado,Estrato 3,Hombres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Ingeniería industrial,Ingeniería,Pregrado,Estrato 3,Hombres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Ingeniería industrial,Ingeniería,Pregrado,Estrato 3,Mujeres,META,1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Ingeniería industrial,Ingeniería,Pregrado,Estrato 2,Hombres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Matemáticas,Ciencias,Pregrado,Estrato 3,Hombres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Matemáticas,Ciencias,Pregrado,Estrato 4,Hombres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Química,Ciencias,Pregrado,Estrato 2,Hombres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2019,UNAL,Matriculado,Zootecnia,Medicina veterinaria y de zootecnia,Pregrado,Estrato 2,Hombres,"BOGOTÁ, D. C.",1,5pqr-ifsd,matriculados_unal,
+2021,Univalle,Matriculado,Enfermería,Facultad de Salud,Universitario,Sin información,Sin información,Sin información,177,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Especialización en Enfermedades Infecciosas en Pediatría,Facultad de Salud,Especialización médico quirúrgica,Sin información,Sin información,Sin información,2,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Especialización en Enfermería Oncológica,Facultad de Salud,Especialización,Sin información,Sin información,Sin información,27,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Especialización en Enfermería en Cuidado a las Personas con Heridas y Ostomias,Facultad de Salud,Especialización,Sin información,Sin información,Sin información,23,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Especialización en Fisioterapia Cardiopulmonar,Facultad de Salud,Especialización,Sin información,Sin información,Sin información,29,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Especialización en Medicina Reproductiva,Facultad de Salud,Especialización,Sin información,Sin información,Sin información,2,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Especialización en Periodoncia,Facultad de Salud,Especialización,Sin información,Sin información,Sin información,10,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Especialización en Rehabilitación Oral,Facultad de Salud,Especialización,Sin información,Sin información,Sin información,11,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Fisioterapia,Facultad de Salud,Universitario,Sin información,Sin información,Sin información,137,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Licenciatura en Literatura,Facultad de Humanidades,Universitario,Sin información,Sin información,Sin información,309,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Maestría en Ciencias Biomédicas,Facultad de Salud,Maestría,Sin información,Sin información,Sin información,51,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Maestría en Ciencias Odontológicas,Facultad de Salud,Maestría,Sin información,Sin información,Sin información,7,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Maestría en Epidemiología,Facultad de Salud,Maestría,Sin información,Sin información,Sin información,58,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Maestría en Fisioterapia,Facultad de Salud,Maestría,Sin información,Sin información,Sin información,8,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Maestría en Salud Ocupacional,Facultad de Salud,Maestría,Sin información,Sin información,Sin información,42,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Maestría en Salud Pública,Facultad de Salud,Maestría,Sin información,Sin información,Sin información,49,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Psicología,Instituto de Psicología,Universitario,Sin información,Sin información,Sin información,320,5f3a-r7ic,matriculados_univalle,Matriculados
+2021,Univalle,Matriculado,Tecnología en Atención Prehospitalaria (Nocturno),Facultad de Salud,Tecnología,Sin información,Sin información,Sin información,337,5f3a-r7ic,matriculados_univalle,Matriculados
+2022,Univalle,Matriculado,Terapia Ocupacional,Facultad de Salud,Universitario,Sin información,Sin información,Sin información,194,5f3a-r7ic,matriculados_univalle,Matriculados
+2022,Univalle,Matriculado,Trabajo Social,Facultad de Humanidades,Universitario,Sin información,Sin información,Sin información,355,5f3a-r7ic,matriculados_univalle,Matriculados
+2023,Univalle,Graduado,Administración de Empresas,Facultad de Ciencias de la Administración,Universitario,Sin información,Sin información,Sin información,9,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Administración de Empresas,Facultad de Ciencias de la Administración,Universitario,Sin información,Sin información,Sin información,2,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Comunicación Social,Facultad de Artes Integradas,Universitario,Sin información,Sin información,Sin información,2,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Contaduría Pública,Facultad de Ciencias de la Administración,Universitario,Sin información,Sin información,Sin información,2,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Diseño Industrial,Facultad de Artes Integradas,Universitario,Sin información,Sin información,Sin información,2,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Especialización en Administración de Empresas de la Construcción,Facultad de Artes Integradas,Especialización,Sin información,Sin información,Sin información,5,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Especialización en Administración y Desarrollo Inmobiliario,Facultad de Artes Integradas,Especialización,Sin información,Sin información,Sin información,1,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Licenciatura en Arte Dramático,Facultad de Artes Integradas,Universitario,Sin información,Sin información,Sin información,3,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Licenciatura en Historia,Facultad de Humanidades,Universitario,Sin información,Sin información,Sin información,3,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Licenciatura en Literatura,Facultad de Humanidades,Universitario,Sin información,Sin información,Sin información,4,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Licenciatura en Literatura,Facultad de Humanidades,Universitario,Sin información,Sin información,Sin información,2,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Maestría en Arquitectura y Urbanismo,Facultad de Artes Integradas,Maestría,Sin información,Sin información,Sin información,1,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Maestría en Culturas Audiovisuales,Facultad de Artes Integradas,Maestría,Sin información,Sin información,Sin información,1,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Psicología,Facultad de Psicología,Universitario,Sin información,Sin información,Sin información,2,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Tecnología Agroambiental,Facultad de Ingeniería,Tecnología,Sin información,Sin información,Sin información,1,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Tecnología en Dirección de Empresas Turísticas y Hoteleras,Facultad de Ciencias de la Administración,Tecnología,Sin información,Sin información,Sin información,2,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Tecnología en Dirección de Empresas Turísticas y Hoteleras,Facultad de Ciencias de la Administración,Tecnología,Sin información,Sin información,Sin información,1,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Tecnología en Electrónica,Facultad de Ingeniería,Tecnología,Sin información,Sin información,Sin información,2,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Tecnología en Sistemas de Información,Facultad de Ingeniería,Tecnología,Sin información,Sin información,Sin información,1,96ss-2484,graduados_univalle,Graduados
+2023,Univalle,Graduado,Tecnología en Sistemas de Información,Facultad de Ingeniería,Tecnología,Sin información,Sin información,Sin información,8,96ss-2484,graduados_univalle,Graduados

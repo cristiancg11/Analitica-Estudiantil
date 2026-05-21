@@ -1,8 +1,102 @@
-/* You can add global styles to this file, and also import other style files */
-body, html {
+/* Global Premium Dark Cybernetic Theme variables and layout styles */
+
+:root {
+  --bg:     #060a10;
+  --bg2:    #0a1220;
+  --card:   #0d1624;
+  --card2:  #111e2e;
+  --border: rgba(255,255,255,0.07);
+  --red:    #f03e3e;
+  --amber:  #f59f00;
+  --teal:   #20c997;
+  --blue:   #4dabf7;
+  --purple: #cc5de8;
+  --green:  #51cf66;
+  --pink:   #f783ac;
+  --slate:  #748ffc;
+  --text:   #e9ecef;
+  --text2:  #8fa3b8;
+  --text3:  #3d5166;
+  --mono:   'DM Mono', monospace;
+  --sans:   'DM Sans', sans-serif;
+  --display:'Bebas Neue', sans-serif;
+  --glow-red: rgba(240, 62, 62, 0.15);
+  --glow-amber: rgba(245, 159, 0, 0.15);
+  --glow-blue: rgba(77, 171, 247, 0.15);
+}
+
+* {
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Grid noise overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: .4;
+    transform: scale(.85);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

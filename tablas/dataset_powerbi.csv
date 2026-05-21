@@ -1,0 +1,67 @@
+anio,universidad,programa,facultad,nivel,estrato,sexo,departamento,total_matriculados,total_graduados,tasa_graduacion,balance_matricula_menos_graduacion,hay_matricula,hay_graduacion,hay_matricula_y_graduacion,alerta_graduados_superan_matricula
+2018,UNAL,Animación,Artes,Especialización,Sin información,Hombres,"BOGOTÁ, D. C.",0,1,0.0,-1,false,true,false,false
+2018,UNAL,Diseño y desarrollo del producto,Artes,Especialización,Sin información,Hombres,"BOGOTÁ, D. C.",0,2,0.0,-2,false,true,false,false
+2018,UNAL,Diseño y desarrollo del producto,Artes,Especialización,Sin información,Hombres,BOYACÁ,0,1,0.0,-1,false,true,false,false
+2018,UNAL,Diseño y desarrollo del producto,Artes,Especialización,Sin información,Mujeres,"BOGOTÁ, D. C.",0,1,0.0,-1,false,true,false,false
+2018,UNAL,Estudios amazónicos,Amazonia,Especialización,Sin información,Hombres,ANTIOQUIA,0,1,0.0,-1,false,true,false,false
+2018,UNAL,Estudios amazónicos,Amazonia,Maestría,Sin información,Hombres,"BOGOTÁ, D. C.",0,1,0.0,-1,false,true,false,false
+2018,UNAL,Pedagogía del diseño,Artes,Especialización,Sin información,Hombres,ANTIOQUIA,0,1,0.0,-1,false,true,false,false
+2018,UNAL,Pedagogía del diseño,Artes,Especialización,Sin información,Hombres,CUNDINAMARCA,0,1,0.0,-1,false,true,false,false
+2018,UNAL,Pedagogía del diseño,Artes,Especialización,Sin información,Hombres,BOYACÁ,0,1,0.0,-1,false,true,false,false
+2018,UNAL,Pedagogía del diseño,Artes,Especialización,Sin información,Hombres,CAQUETÁ,0,1,0.0,-1,false,true,false,false
+2018,UNAL,Pedagogía del diseño,Artes,Especialización,Sin información,Mujeres,"BOGOTÁ, D. C.",0,2,0.0,-2,false,true,false,false
+2018,UNAL,Pedagogía del diseño,Artes,Especialización,Sin información,Hombres,"BOGOTÁ, D. C.",0,5,0.0,-5,false,true,false,false
+2019,UNAL,Derecho,"Derecho, ciencias políticas y sociales",Pregrado,Estrato 4,Mujeres,CUNDINAMARCA,1,0,0.0,1,true,false,false,false
+2019,UNAL,Derecho,"Derecho, ciencias políticas y sociales",Pregrado,Estrato 3,Hombres,"BOGOTÁ, D. C.",1,0,0.0,1,true,false,false,false
+2019,UNAL,Economía,Ciencias económicas,Pregrado,Estrato 2,Hombres,"BOGOTÁ, D. C.",1,0,0.0,1,true,false,false,false
+2019,UNAL,Economía,Ciencias económicas,Pregrado,Estrato 3,Mujeres,"BOGOTÁ, D. C.",1,0,0.0,1,true,false,false,false
+2019,UNAL,Ingeniería agrícola,Ingeniería,Pregrado,Estrato 2,Mujeres,META,1,0,0.0,1,true,false,false,false
+2019,UNAL,Ingeniería agrícola,Ingeniería,Pregrado,Estrato 3,Hombres,"BOGOTÁ, D. C.",1,0,0.0,1,true,false,false,false
+2019,UNAL,Ingeniería civil,Ingeniería,Pregrado,Estrato 3,Mujeres,"BOGOTÁ, D. C.",1,0,0.0,1,true,false,false,false
+2019,UNAL,Ingeniería de sistemas y computación,Ingeniería,Pregrado,Estrato 3,Hombres,"BOGOTÁ, D. C.",3,0,0.0,3,true,false,false,false
+2019,UNAL,Ingeniería electrónica,Ingeniería,Pregrado,Estrato 4,Mujeres,"BOGOTÁ, D. C.",1,0,0.0,1,true,false,false,false
+2019,UNAL,Ingeniería eléctrica,Ingeniería,Pregrado,Estrato 3,Hombres,"BOGOTÁ, D. C.",1,0,0.0,1,true,false,false,false
+2019,UNAL,Ingeniería eléctrica,Ingeniería,Pregrado,Estrato 2,Hombres,"BOGOTÁ, D. C.",1,0,0.0,1,true,false,false,false
+2019,UNAL,Ingeniería industrial,Ingeniería,Pregrado,Estrato 3,Mujeres,META,1,0,0.0,1,true,false,false,false
+2019,UNAL,Ingeniería industrial,Ingeniería,Pregrado,Estrato 2,Hombres,"BOGOTÁ, D. C.",1,0,0.0,1,true,false,false,false
+2019,UNAL,Ingeniería industrial,Ingeniería,Pregrado,Estrato 3,Hombres,"BOGOTÁ, D. C.",1,0,0.0,1,true,false,false,false
+2019,UNAL,Matemáticas,Ciencias,Pregrado,Estrato 3,Hombres,"BOGOTÁ, D. C.",1,0,0.0,1,true,false,false,false
+2019,UNAL,Matemáticas,Ciencias,Pregrado,Estrato 4,Hombres,"BOGOTÁ, D. C.",1,0,0.0,1,true,false,false,false
+2019,UNAL,Química,Ciencias,Pregrado,Estrato 2,Hombres,"BOGOTÁ, D. C.",1,0,0.0,1,true,false,false,false
+2019,UNAL,Zootecnia,Medicina veterinaria y de zootecnia,Pregrado,Estrato 2,Hombres,"BOGOTÁ, D. C.",1,0,0.0,1,true,false,false,false
+2021,Univalle,Enfermería,Facultad de Salud,Universitario,Sin información,Sin información,Sin información,177,0,0.0,177,true,false,false,false
+2021,Univalle,Especialización en Enfermedades Infecciosas en Pediatría,Facultad de Salud,Especialización médico quirúrgica,Sin información,Sin información,Sin información,2,0,0.0,2,true,false,false,false
+2021,Univalle,Especialización en Enfermería Oncológica,Facultad de Salud,Especialización,Sin información,Sin información,Sin información,27,0,0.0,27,true,false,false,false
+2021,Univalle,Especialización en Enfermería en Cuidado a las Personas con Heridas y Ostomias,Facultad de Salud,Especialización,Sin información,Sin información,Sin información,23,0,0.0,23,true,false,false,false
+2021,Univalle,Especialización en Fisioterapia Cardiopulmonar,Facultad de Salud,Especialización,Sin información,Sin información,Sin información,29,0,0.0,29,true,false,false,false
+2021,Univalle,Especialización en Medicina Reproductiva,Facultad de Salud,Especialización,Sin información,Sin información,Sin información,2,0,0.0,2,true,false,false,false
+2021,Univalle,Especialización en Periodoncia,Facultad de Salud,Especialización,Sin información,Sin información,Sin información,10,0,0.0,10,true,false,false,false
+2021,Univalle,Especialización en Rehabilitación Oral,Facultad de Salud,Especialización,Sin información,Sin información,Sin información,11,0,0.0,11,true,false,false,false
+2021,Univalle,Fisioterapia,Facultad de Salud,Universitario,Sin información,Sin información,Sin información,137,0,0.0,137,true,false,false,false
+2021,Univalle,Licenciatura en Literatura,Facultad de Humanidades,Universitario,Sin información,Sin información,Sin información,309,0,0.0,309,true,false,false,false
+2021,Univalle,Maestría en Ciencias Biomédicas,Facultad de Salud,Maestría,Sin información,Sin información,Sin información,51,0,0.0,51,true,false,false,false
+2021,Univalle,Maestría en Ciencias Odontológicas,Facultad de Salud,Maestría,Sin información,Sin información,Sin información,7,0,0.0,7,true,false,false,false
+2021,Univalle,Maestría en Epidemiología,Facultad de Salud,Maestría,Sin información,Sin información,Sin información,58,0,0.0,58,true,false,false,false
+2021,Univalle,Maestría en Fisioterapia,Facultad de Salud,Maestría,Sin información,Sin información,Sin información,8,0,0.0,8,true,false,false,false
+2021,Univalle,Maestría en Salud Ocupacional,Facultad de Salud,Maestría,Sin información,Sin información,Sin información,42,0,0.0,42,true,false,false,false
+2021,Univalle,Maestría en Salud Pública,Facultad de Salud,Maestría,Sin información,Sin información,Sin información,49,0,0.0,49,true,false,false,false
+2021,Univalle,Psicología,Instituto de Psicología,Universitario,Sin información,Sin información,Sin información,320,0,0.0,320,true,false,false,false
+2021,Univalle,Tecnología en Atención Prehospitalaria (Nocturno),Facultad de Salud,Tecnología,Sin información,Sin información,Sin información,337,0,0.0,337,true,false,false,false
+2022,Univalle,Terapia Ocupacional,Facultad de Salud,Universitario,Sin información,Sin información,Sin información,194,0,0.0,194,true,false,false,false
+2022,Univalle,Trabajo Social,Facultad de Humanidades,Universitario,Sin información,Sin información,Sin información,355,0,0.0,355,true,false,false,false
+2023,Univalle,Administración de Empresas,Facultad de Ciencias de la Administración,Universitario,Sin información,Sin información,Sin información,0,11,0.0,-11,false,true,false,false
+2023,Univalle,Comunicación Social,Facultad de Artes Integradas,Universitario,Sin información,Sin información,Sin información,0,2,0.0,-2,false,true,false,false
+2023,Univalle,Contaduría Pública,Facultad de Ciencias de la Administración,Universitario,Sin información,Sin información,Sin información,0,2,0.0,-2,false,true,false,false
+2023,Univalle,Diseño Industrial,Facultad de Artes Integradas,Universitario,Sin información,Sin información,Sin información,0,2,0.0,-2,false,true,false,false
+2023,Univalle,Especialización en Administración de Empresas de la Construcción,Facultad de Artes Integradas,Especialización,Sin información,Sin información,Sin información,0,5,0.0,-5,false,true,false,false
+2023,Univalle,Especialización en Administración y Desarrollo Inmobiliario,Facultad de Artes Integradas,Especialización,Sin información,Sin información,Sin información,0,1,0.0,-1,false,true,false,false
+2023,Univalle,Licenciatura en Arte Dramático,Facultad de Artes Integradas,Universitario,Sin información,Sin información,Sin información,0,3,0.0,-3,false,true,false,false
+2023,Univalle,Licenciatura en Historia,Facultad de Humanidades,Universitario,Sin información,Sin información,Sin información,0,3,0.0,-3,false,true,false,false
+2023,Univalle,Licenciatura en Literatura,Facultad de Humanidades,Universitario,Sin información,Sin información,Sin información,0,6,0.0,-6,false,true,false,false
+2023,Univalle,Maestría en Arquitectura y Urbanismo,Facultad de Artes Integradas,Maestría,Sin información,Sin información,Sin información,0,1,0.0,-1,false,true,false,false
+2023,Univalle,Maestría en Culturas Audiovisuales,Facultad de Artes Integradas,Maestría,Sin información,Sin información,Sin información,0,1,0.0,-1,false,true,false,false
+2023,Univalle,Psicología,Facultad de Psicología,Universitario,Sin información,Sin información,Sin información,0,2,0.0,-2,false,true,false,false
+2023,Univalle,Tecnología Agroambiental,Facultad de Ingeniería,Tecnología,Sin información,Sin información,Sin información,0,1,0.0,-1,false,true,false,false
+2023,Univalle,Tecnología en Dirección de Empresas Turísticas y Hoteleras,Facultad de Ciencias de la Administración,Tecnología,Sin información,Sin información,Sin información,0,3,0.0,-3,false,true,false,false
+2023,Univalle,Tecnología en Electrónica,Facultad de Ingeniería,Tecnología,Sin información,Sin información,Sin información,0,2,0.0,-2,false,true,false,false
+2023,Univalle,Tecnología en Sistemas de Información,Facultad de Ingeniería,Tecnología,Sin información,Sin información,Sin información,0,9,0.0,-9,false,true,false,false

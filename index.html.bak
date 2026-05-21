@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tablero analítico e interactivo de la deserción estudiantil en la Universidad Nacional de Colombia (UNAL). Análisis detallado de 584,334 registros de matrícula entre 2018 y 2023.">
+  <meta name="author" content="Universidad Nacional de Colombia - Dashboard Analítico">
+  <title>Deserción Estudiantil — UNAL</title>
+  
+  <!-- Favicon using inline SVG of UN logo style -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23f03e3e'/%3E%3Ctext y='70' x='15' fill='white' font-family='sans-serif' font-weight='bold' font-size='55'%3EUN%3C/text%3E%3C/svg%3E">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ─── POWER BI HTML DASHBOARD — UNAL Deserción ─── */
+    /* Compatible con: HTML Content (DataChant), SharePoint iframe, Power BI Embedded */
+
+    :root {
+      --bg:     #060a10;
+      --bg2:    #0a1220;
+      --card:   #0d1624;
+      --card2:  #111e2e;
+      --border: rgba(255,255,255,0.07);
+      --red:    #f03e3e;
+      --amber:  #f59f00;
+      --teal:   #20c997;
+      --blue:   #4dabf7;
+      --purple: #cc5de8;
+      --green:  #51cf66;
+      --pink:   #f783ac;
+      --slate:  #748ffc;
+      --text:   #e9ecef;
+      --text2:  #8fa3b8;
+      --text3:  #3d5166;
+      --mono:   'DM Mono', monospace;
+      --sans:   'DM Sans', sans-serif;
+      --display:'Bebas Neue', sans-serif;
+      --glow-red: rgba(240, 62, 62, 0.15);
+      --glow-amber: rgba(245, 159, 0, 0.15);
+      --glow-blue: rgba(77, 171, 247, 0.15);
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* grid noise overlay */
+    body::before {
+      content:'';
+      position:fixed; inset:0; z-index:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events:none;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky; top:0; z-index:200;
+      background: rgba(6,10,16,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: all 0.3s ease;
+    }
+    .brand {
+      display:flex; align-items:center; gap:12px;
+    }
+    .brand-logo {
+      width:38px; height:38px; border-radius:8px;
+      background: var(--red);
+      display:flex; align-items:center; justify-content:center;
+      font-family: var(--display);
+      font-size:22px; letter-spacing:0.02em;
+      color:#fff;
+      box-shadow: 0 0 15px var(--glow-red);
+      transition: transform 0.3s ease;
+    }
+    .brand:hover .brand-logo {
+      transform: scale(1.05) rotate(-3deg);
+    }
+    .brand-title {
+      font-family: var(--display);
+      font-size:22px; letter-spacing:0.06em;
+      color:var(--text);
+      line-height: 1;
+    }
+    .brand-sub {
+      font-size:10px; color:var(--text3);
+      font-family: var(--mono);
+      margin-top:4px;
+    }
+    .header-right {
+      display:flex; align-items:center; gap:20px;
+    }
+    .header-stat {
+      font-family:var(--mono);
+      font-size:11px; color:var(--text3);
+    }
+    .header-stat span { color:var(--text2); font-weight: 500; }
+    .pulse {
+      width:8px; height:8px; border-radius:50%;
+      background:var(--green);
+      box-shadow: 0 0 10px var(--green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.85)} }
+
+    /* ── HERO ── */
+    .hero {
+      position:relative; z-index:1;
+      padding: 56px 28px 36px;
+      max-width: 1440px; margin:0 auto;
+    }
+    .hero-accent {
+      position:absolute; top:-60px; left:-60px;
+      width:600px; height:400px;
+      background: radial-gradient(ellipse at center, rgba(240,62,62,0.08) 0%, transparent 70%);
+      pointer-events:none;
+      filter: blur(40px);
+    }
+    .hero-eyebrow {
+      font-family:var(--mono);
+      font-size:11px; color:var(--red);
+      letter-spacing:0.15em; text-transform:uppercase;
+      margin-bottom:14px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .hero-eyebrow::before {
+      content:'';
+      display:block; width:24px; height:1px;
+      background:var(--red);
+    }
+    .hero h1 {
+      font-family: var(--display);
+      font-size: clamp(48px, 8vw, 92px);
+      letter-spacing: 0.04em;
+      line-height: 0.95;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+    .hero h1 em {
+      font-style:normal;
+      -webkit-text-stroke: 1px var(--red);
+      color: transparent;
+      text-shadow: 0 0 30px var(--glow-red);
+    }
+    .hero-desc {
+      font-size:15px; color:var(--text2);
+      line-height:1.7; max-width:560px;
+      font-weight:300;
+    }
+
+    /* ── KPI STRIP ── */
+    .kpi-strip {
+      display:grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap:12px;
+      max-width:1440px; margin:0 auto 32px;
+      padding: 0 28px;
+      position:relative; z-index:1;
+    }
+    .kpi {
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:16px 18px;
+      position:relative; overflow:hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .kpi:hover { 
+      border-color: rgba(255,255,255,0.15); 
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -10px rgba(0,0,0,0.5);
+    }
+    .kpi-top-bar {
+      position:absolute; top:0; left:0; right:0;
+      height:3px;
+    }
+    .kpi-label {
+      font-family:var(--mono);
+      font-size:9px; color:var(--text3);
+      letter-spacing:0.12em; text-transform:uppercase;
+      margin-bottom:8px;
+    }
+    .kpi-value {
+      font-family:var(--display);
+      font-size:38px; letter-spacing:0.02em;
+      color:var(--text); line-height:1;
+      margin-bottom:6px;
+      transition: color 0.3s ease;
+    }
+    .kpi:hover .kpi-value {
+      color: #fff;
+    }
+    .kpi-sub {
+      font-size:11px; color:var(--text3);
+    }
+    .kpi-badge {
+      display:inline-flex; align-items:center;
+      margin-top:8px;
+      font-family:var(--mono);
+      font-size:10px; padding:2px 6px;
+      border-radius:4px;
+      font-weight: 500;
+    }
+    .badge-red { background:rgba(240,62,62,.15); color:#ffa8a8; }
+    .badge-green { background:rgba(81,207,102,.15); color:#8ce99a; }
+
+    /* ── LAYOUT ── */
+    .main {
+      max-width:1440px; margin:0 auto;
+      padding: 0 28px 48px;
+      position:relative; z-index:1;
+      display:flex; flex-direction:column; gap:36px;
+    }
+    .row { display:grid; gap:20px; }
+    .row-2  { grid-template-columns:1fr 1fr; }
+    .row-3  { grid-template-columns:1fr 1fr 1fr; }
+    .row-21 { grid-template-columns:2fr 1fr; }
+    .row-12 { grid-template-columns:1fr 2fr; }
+
+    /* ── CARD ── */
+    .card {
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:20px;
+      transition: border-color .3s ease, box-shadow .3s ease;
+      box-shadow: 0 4px 20px -5px rgba(0,0,0,0.2);
+    }
+    .card:hover { 
+      border-color: rgba(255,255,255,0.12);
+      box-shadow: 0 8px 30px -10px rgba(0,0,0,0.4);
+    }
+
+    .card-header {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:20px;
+    }
+    .card-title {
+      font-family:var(--mono);
+      font-size:11px; color:var(--text2);
+      display:flex; align-items:center; gap:8px;
+      text-transform:uppercase; letter-spacing:0.08em;
+    }
+    .dot {
+      width:8px; height:8px; border-radius:50%;
+      flex-shrink:0;
+      box-shadow: 0 0 8px currentColor;
+    }
+    .card-badge {
+      font-family:var(--mono);
+      font-size:10px; color:var(--text3);
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-family:var(--display);
+      font-size:30px; letter-spacing:0.08em;
+      color:var(--text);
+      padding-bottom:14px;
+      border-bottom:1px solid var(--border);
+      margin-bottom:20px;
+      display:flex; align-items:baseline; gap:16px;
+    }
+    .section-label small {
+      font-family:var(--mono);
+      font-size:12px; color:var(--text3);
+      letter-spacing:0.06em;
+      text-transform:uppercase;
+      font-weight:400;
+    }
+
+    /* ── CHART CONTAINERS ── */
+    .ch { position:relative; transition: all 0.3s ease; }
+    .ch-md  { height:240px; }
+    .ch-lg  { height:300px; }
+    .ch-xl  { height:340px; }
+    .ch-sm  { height:180px; }
+
+    /* ── HBAR ── */
+    .hbar-row {
+      display:flex; flex-direction:column; gap:14px;
+    }
+    .hbar-item { display:flex; flex-direction:column; gap:6px; }
+    .hbar-meta { display:flex; justify-content:space-between; align-items:baseline; }
+    .hbar-name { font-size:13px; color:var(--text2); }
+    .hbar-val { font-family:var(--mono); font-size:12px; color:var(--text); font-weight:500; }
+    .hbar-track {
+      height:6px; background:rgba(255,255,255,0.04);
+      border-radius:3px; overflow:hidden;
+    }
+    .hbar-fill { 
+      height:100%; border-radius:3px; 
+      transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ── TABLE ── */
+    .data-table { width:100%; border-collapse:collapse; font-size:12px; }
+    .data-table th {
+      text-align:left; padding:10px 14px;
+      font-family:var(--mono);
+      font-size:10px; color:var(--text3);
+      text-transform:uppercase; letter-spacing:0.08em;
+      border-bottom:1px solid var(--border);
+    }
+    .data-table td {
+      padding:12px 14px;
+      border-bottom:1px solid rgba(255,255,255,0.03);
+      color:var(--text2);
+      font-size:13px;
+      transition: all 0.2s ease;
+    }
+    .data-table tr:last-child td { border:none; }
+    .data-table tr:hover td { 
+      background:rgba(255,255,255,0.015); 
+      color: #fff;
+    }
+    .tag {
+      display:inline-block;
+      padding:3px 8px; border-radius:4px;
+      font-family:var(--mono); font-size:10px; font-weight:600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .tag-r { background:rgba(240,62,62,.15); color:#ffa8a8; }
+    .tag-a { background:rgba(245,159,0,.15);  color:#ffd43b; }
+    .tag-g { background:rgba(81,207,102,.15); color:#8ce99a; }
+    .tag-b { background:rgba(77,171,247,.15); color:#a5d8ff; }
+
+    /* ── INSIGHTS ── */
+    .insights-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(320px,1fr));
+      gap:14px;
+    }
+    .insight {
+      background:var(--card2);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:18px;
+      display:flex; gap:14px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .insight:hover { 
+      border-color:rgba(255,255,255,0.15); 
+      transform: translateY(-2px);
+    }
+    .insight-icon {
+      width:42px; height:42px; flex-shrink:0;
+      border-radius:8px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:20px;
+      transition: transform 0.3s ease;
+    }
+    .insight:hover .insight-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+    .i-t { font-size:14px; font-weight:600; color:var(--text); margin-bottom:6px; }
+    .i-s { font-size:12px; color:var(--text2); line-height:1.6; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top:1px solid var(--border);
+      padding:32px 28px;
+      max-width:1440px; margin:0 auto;
+      display:flex; justify-content:space-between; align-items:center;
+      font-family:var(--mono);
+      font-size:11px; color:var(--text3);
+      position:relative; z-index:1;
+    }
+    footer span a {
+      color: var(--text3);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    footer span a:hover {
+      color: var(--text2);
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    @media(max-width:1100px){
+      .row-2,.row-3,.row-21,.row-12 { grid-template-columns:1fr; }
+      .kpi-strip { grid-template-columns:repeat(3,1fr); }
+    }
+    @media(max-width:640px){
+      header, .hero, .kpi-strip, .main { padding-left:16px; padding-right:16px; }
+      header { height: auto; padding: 12px 16px; flex-direction: column; gap: 10px; align-items: flex-start; }
+      .header-right { width: 100%; justify-content: space-between; }
+      .kpi-strip { grid-template-columns:repeat(2,1fr); }
+      .hero h1 { font-size:48px; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+
+    /* ── SECCIÓN EXPLORADOR DE DATOS LOCALES ── */
+    .pbi-section {
+      margin-top: 12px;
+    }
+    .pbi-tabs-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .pbi-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    .pbi-tab-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text2);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pbi-tab-btn:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .pbi-tab-btn.active {
+      background: rgba(240, 62, 62, 0.08);
+      color: #fff;
+      border-color: var(--red);
+      box-shadow: 0 0 15px var(--glow-red);
+    }
+    .pbi-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: var(--card2);
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .pbi-search-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+    .pbi-search-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px 8px 34px;
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 13px;
+      transition: all 0.3s ease;
+    }
+    .pbi-search-input:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.25);
+      background: rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.03);
+    }
+    .pbi-search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+      color: var(--text3);
+      pointer-events: none;
+    }
+    .pbi-filters {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+    .pbi-select {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 30px 8px 12px;
+      color: var(--text2);
+      font-family: var(--sans);
+      font-size: 12px;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%238fa3b8'><path d='M0 3h10L5 8z'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      transition: all 0.2s ease;
+    }
+    .pbi-select:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+    .pbi-select:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    .pbi-export-btn {
+      background: transparent;
+      border: 1px solid rgba(81, 207, 102, 0.3);
+      color: #8ce99a;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pbi-export-btn:hover {
+      background: rgba(81, 207, 102, 0.1);
+      border-color: #51cf66;
+      box-shadow: 0 0 10px rgba(81, 207, 102, 0.15);
+      color: #fff;
+    }
+    .pbi-table-wrapper {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow-x: auto;
+      max-height: 500px;
+      box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.5);
+    }
+    .pbi-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      font-family: var(--sans);
+    }
+    .pbi-table th {
+      position: sticky;
+      top: 0;
+      background: #0d1624;
+      z-index: 5;
+      padding: 12px 16px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 2px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+    .pbi-table th:hover {
+      background: #111d30;
+      color: #fff;
+    }
+    .pbi-table th.sort-asc::after {
+      content: " 🔼";
+      font-size: 8px;
+    }
+    .pbi-table th.sort-desc::after {
+      content: " 🔽";
+      font-size: 8px;
+    }
+    .pbi-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+      color: var(--text2);
+      font-size: 13px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .pbi-table tr:hover td {
+      background: rgba(255, 255, 255, 0.015);
+      color: #fff;
+    }
+    .pbi-table tr:last-child td {
+      border-bottom: none;
+    }
+    .pbi-no-results {
+      padding: 40px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--text3);
+      font-family: var(--mono);
+    }
+    .pbi-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      background: var(--card2);
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .pbi-page-info {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text3);
+    }
+    .pbi-page-info span {
+      color: var(--text2);
+    }
+    .pbi-page-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pbi-page-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text2);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .pbi-page-btn:hover:not(:disabled) {
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .pbi-page-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .pbi-page-btn.active {
+      background: var(--red);
+      color: #fff;
+      border-color: var(--red);
+    }
+    .tag-matricula {
+      background: rgba(77, 171, 247, 0.1);
+      border: 1px solid rgba(77, 171, 247, 0.15);
+      color: #a5d8ff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-family: var(--mono);
+    }
+    .tag-graduado {
+      background: rgba(81, 207, 102, 0.1);
+      border: 1px solid rgba(81, 207, 102, 0.15);
+      color: #8ce99a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-family: var(--mono);
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="brand">
+    <div class="brand-logo" id="logo-icon">UN</div>
+    <div>
+      <div class="brand-title">DESERCIÓN UNAL</div>
+      <div class="brand-sub">SNIES · 2018–2023 · 584,334 REGISTROS</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="header-stat">NIVEL <span>Pregrado + Postgrado</span></div>
+    <div class="header-stat">SEDES <span>9 activas</span></div>
+    <div class="pulse" title="Sistema en línea activo"></div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-accent"></div>
+  <div class="hero-eyebrow">Análisis de deserción estudiantil</div>
+  <h1 id="hero-title">DESERCIÓN<br><em>EN LA UNAL</em></h1>
+  <p class="hero-desc">
+    Análisis de 584,334 registros de matrícula (2018–2023) para identificar patrones 
+    según sede, facultad, estrato socioeconómico, sexo y nivel académico.
+  </p>
+</div>
+
+<!-- KPI STRIP -->
+<div class="kpi-strip" id="kpi-section">
+  <div class="kpi">
+    <div class="kpi-top-bar" style="background:var(--red)"></div>
+    <div class="kpi-label">Total registros</div>
+    <div class="kpi-value">584K</div>
+    <div class="kpi-sub">2018 – 2023</div>
+    <div class="kpi-badge badge-red">+30% vs 2019</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-top-bar" style="background:var(--amber)"></div>
+    <div class="kpi-label">Pregrado</div>
+    <div class="kpi-value">489K</div>
+    <div class="kpi-sub">83.8% del total</div>
+    <div class="kpi-badge badge-red">Mayor riesgo</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-top-bar" style="background:var(--blue)"></div>
+    <div class="kpi-label">Sedes</div>
+    <div class="kpi-value">9</div>
+    <div class="kpi-sub">Bogotá lidera 59%</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-top-bar" style="background:var(--purple)"></div>
+    <div class="kpi-label">Brecha género</div>
+    <div class="kpi-value">61/39</div>
+    <div class="kpi-sub">Hombres / Mujeres</div>
+    <div class="kpi-badge badge-red">Alta desigualdad</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-top-bar" style="background:var(--teal)"></div>
+    <div class="kpi-label">Estrato vulnerable</div>
+    <div class="kpi-value">48.5%</div>
+    <div class="kpi-sub">Estratos 1 y 2</div>
+    <div class="kpi-badge badge-red">Mayor riesgo</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-top-bar" style="background:var(--green)"></div>
+    <div class="kpi-label">Edad predominante</div>
+    <div class="kpi-value">20–24</div>
+    <div class="kpi-sub">48% de estudiantes</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main" id="main-content">
+
+  <!-- S1: TENDENCIA -->
+  <section aria-label="Evolución temporal">
+    <div class="section-label">EVOLUCIÓN TEMPORAL <small>2018 – 2023 · Por nivel académico</small></div>
+    <div class="row row-21">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="dot" style="background:var(--red); color:var(--red);"></div>Matrículas por año y nivel académico</div>
+        </div>
+        <div class="ch ch-lg"><canvas id="c-tendencia" aria-label="Gráfica de tendencia temporal de matrículas por nivel académico"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="dot" style="background:var(--amber); color:var(--amber);"></div>Distribución por nivel</div>
+        </div>
+        <div class="ch ch-lg"><canvas id="c-nivel-donut" aria-label="Gráfica circular de distribución por nivel académico"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S2: SEDES -->
+  <section aria-label="Distribución por sede">
+    <div class="section-label">POR SEDE UNIVERSITARIA <small>Concentración y brecha de género</small></div>
+    <div class="row row-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="dot" style="background:var(--blue); color:var(--blue);"></div>Estudiantes por sede (2018–2023)</div>
+        </div>
+        <div class="ch ch-lg"><canvas id="c-sedes-bar" aria-label="Gráfica de barras de estudiantes por sede"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="dot" style="background:var(--purple); color:var(--purple);"></div>Hombres vs Mujeres por sede</div>
+        </div>
+        <div class="ch ch-lg"><canvas id="c-sede-genero" aria-label="Gráfica de barras de distribución por género y sede"></canvas></div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:16px">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="dot" style="background:var(--teal); color:var(--teal);"></div>Evolución por sede (2019–2023)</div>
+        </div>
+        <div class="ch ch-sm"><canvas id="c-sedes-evol" aria-label="Gráfica de líneas de evolución estudiantil por sede principal"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S3: PERFIL -->
+  <section aria-label="Perfil del estudiante">
+    <div class="section-label">PERFIL DEL ESTUDIANTE <small>Estrato, edad y facultad</small></div>
+    <div class="row row-3">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="dot" style="background:var(--amber); color:var(--amber);"></div>Estrato socioeconómico</div>
+        </div>
+        <div class="ch ch-md"><canvas id="c-estrato" aria-label="Gráfica de barras de distribución por estrato socioeconómico"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="dot" style="background:var(--green); color:var(--green);"></div>Rango de edad</div>
+        </div>
+        <div class="ch ch-md"><canvas id="c-edad" aria-label="Gráfica de barras de estudiantes agrupados por rangos de edad"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="dot" style="background:var(--pink); color:var(--pink);"></div>Distribución por sexo</div>
+        </div>
+        <div class="ch ch-md"><canvas id="c-sexo-donut" aria-label="Gráfica circular de distribución porcentual por sexo"></canvas></div>
+      </div>
+    </div>
+    <div class="row row-12" style="margin-top:16px">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="dot" style="background:var(--purple); color:var(--purple);"></div>Estrato por año</div>
+        </div>
+        <div class="ch ch-lg"><canvas id="c-estrato-anio" aria-label="Gráfica de líneas de estudiantes vulnerables por año"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="dot" style="background:var(--blue); color:var(--blue);"></div>Top facultades por estudiantes</div>
+        </div>
+        <div class="hbar-row" id="hbar-facultad" style="margin-top:4px"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S4: RIESGO -->
+  <section aria-label="Análisis de riesgo">
+    <div class="section-label">ANÁLISIS DE RIESGO <small>Programas · Procedencia · Facultad</small></div>
+    <div class="row row-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="dot" style="background:var(--red); color:var(--red);"></div>Top 10 programas con más estudiantes</div>
+        </div>
+        <div class="ch ch-lg"><canvas id="c-programas" aria-label="Gráfica de barras horizontal con el top 10 de programas académicos"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="dot" style="background:var(--teal); color:var(--teal);"></div>Procedencia por departamento (top 8)</div>
+        </div>
+        <div class="ch ch-lg"><canvas id="c-deptos" aria-label="Gráfica circular de procedencia por departamentos"></canvas></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="card-header">
+        <div class="card-title"><div class="dot" style="background:var(--amber); color:var(--amber);"></div>Niveles académicos por facultad — Pregrado, Maestría, Doctorado</div>
+      </div>
+      <div class="ch" style="height:260px"><canvas id="c-fac-nivel" aria-label="Gráfica de barras comparativa de niveles por facultad"></canvas></div>
+    </div>
+  </section>
+
+  <!-- INSIGHTS -->
+  <section aria-label="Hallazgos clave">
+    <div class="section-label">HALLAZGOS CLAVE <small>Factores de riesgo identificados</small></div>
+    <div class="insights-grid">
+      <div class="insight">
+        <div class="insight-icon" style="background:rgba(240,62,62,0.12)">🎯</div>
+        <div>
+          <div class="i-t">Estratos 1 y 2 — 48.5% de estudiantes</div>
+          <div class="i-s">Mayor riesgo por presión económica. Representan 285,660 registros en el período.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon" style="background:rgba(245,159,0,0.12)">⚡</div>
+        <div>
+          <div class="i-t">Brecha de género en todas las sedes</div>
+          <div class="i-s">61% hombres vs 39% mujeres. Manizales tiene la mayor brecha (65/35). Solo Palmira tiene paridad.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon" style="background:rgba(77,171,247,0.12)">📍</div>
+        <div>
+          <div class="i-t">Bogotá concentra el 59% de los estudiantes</div>
+          <div class="i-s">345,217 registros. Sedes como Caribe (828) y Amazonía (1,870) en riesgo de baja matrícula.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon" style="background:rgba(204,93,232,0.12)">📉</div>
+        <div>
+          <div class="i-t">Caída del 37% en Medellín por COVID-19</div>
+          <div class="i-s">Medellín cayó de 26,825 (2019) a 16,996 (2020). El impacto pandémico fue diferenciado por sede.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon" style="background:rgba(32,201,151,0.12)">🎓</div>
+        <div>
+          <div class="i-t">Pregrado concentra el mayor riesgo</div>
+          <div class="i-s">489,984 estudiantes de pregrado (83.8%) vs 94,350 de postgrado. Deserción en primeros semestres es crítica.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon" style="background:rgba(81,207,102,0.12)">👥</div>
+        <div>
+          <div class="i-t">Cohorte 20–24: la más vulnerable</div>
+          <div class="i-s">282,558 estudiantes (48%) antes de completar el primer ciclo académico.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPLORADOR DE TABLAS DE POWER BI (DATOS LOCALES) -->
+  <section class="pbi-section" id="seccion-datos-locales" aria-label="Explorador de Datos Locales">
+    <div class="section-label">EXPLORADOR DE DATOS DE POWER BI <small>Navegación interactiva por datasets locales procesados</small></div>
+    
+    <div class="pbi-tabs-container">
+      <!-- Select between the two CSV datasets -->
+      <div class="pbi-tabs" id="pbi-tab-list">
+        <button class="pbi-tab-btn active" onclick="switchLocalDataset('dataset_powerbi.csv', this)">
+          📊 Resumen Power BI (Matrícula y Graduación)
+        </button>
+        <button class="pbi-tab-btn" onclick="switchLocalDataset('dataset_filas_fuente.csv', this)">
+          👥 Detalle de Estudiantes Consolidado
+        </button>
+      </div>
+
+      <!-- Controls: search bar, dropdown filters, export button -->
+      <div class="pbi-controls">
+        <div class="pbi-search-wrapper">
+          <span class="pbi-search-icon">🔍</span>
+          <input 
+            type="text" 
+            id="pbi-search-input" 
+            class="pbi-search-input" 
+            placeholder="Buscar en la tabla..." 
+            oninput="handleSearch(this.value)">
+        </div>
+
+        <div class="pbi-filters" id="pbi-filters-row">
+          <!-- Dropdowns will be populated dynamically based on selected table -->
+        </div>
+
+        <button class="pbi-export-btn" onclick="exportFilteredData()">
+          📥 Exportar CSV
+        </button>
+      </div>
+
+      <!-- Table container -->
+      <div class="pbi-table-wrapper">
+        <table class="pbi-table" id="pbi-data-table">
+          <thead id="pbi-table-head">
+            <!-- Headers generated by JS -->
+          </thead>
+          <tbody id="pbi-table-body">
+            <!-- Rows generated by JS -->
+          </tbody>
+        </table>
+        <div id="pbi-no-results-msg" class="pbi-no-results" style="display: none;">
+          No se encontraron registros que coincidan con la búsqueda o filtros.
+        </div>
+      </div>
+
+      <!-- Pagination bar -->
+      <div class="pbi-pagination">
+        <div class="pbi-page-info">
+          Mostrando registros del <span id="pbi-page-start">0</span> al <span id="pbi-page-end">0</span> de un total de <span id="pbi-page-total">0</span>
+        </div>
+        <div class="pbi-page-controls" id="pbi-pagination-controls">
+          <!-- Page buttons generated by JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TABLA -->
+  <section aria-label="Tabla de riesgo de programas">
+    <div class="section-label">TABLA DE RIESGO <small>Por programa académico</small></div>
+    <div class="card" style="overflow-x: auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Programa</th>
+            <th>Estudiantes</th>
+            <th>% total</th>
+            <th>Nivel de riesgo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>01</td><td>Arquitectura</td><td>19,918</td><td>3.4%</td><td><span class="tag tag-r">Alto</span></td></tr>
+          <tr><td>02</td><td>Ingeniería Civil</td><td>27,392</td><td>4.7%</td><td><span class="tag tag-r">Alto</span></td></tr>
+          <tr><td>03</td><td>Medicina</td><td>15,712</td><td>2.7%</td><td><span class="tag tag-a">Medio</span></td></tr>
+          <tr><td>04</td><td>Ingeniería Química</td><td>14,292</td><td>2.4%</td><td><span class="tag tag-r">Alto</span></td></tr>
+          <tr><td>05</td><td>Economía</td><td>13,282</td><td>2.3%</td><td><span class="tag tag-a">Medio</span></td></tr>
+          <tr><td>06</td><td>Zootecnia</td><td>11,793</td><td>2.0%</td><td><span class="tag tag-a">Medio</span></td></tr>
+          <tr><td>07</td><td>Derecho</td><td>10,755</td><td>1.8%</td><td><span class="tag tag-g">Bajo</span></td></tr>
+          <tr><td>08</td><td>Ingeniería Agronómica</td><td>10,632</td><td>1.8%</td><td><span class="tag tag-a">Medio</span></td></tr>
+          <tr><td>09</td><td>Estadística</td><td>10,332</td><td>1.8%</td><td><span class="tag tag-r">Alto</span></td></tr>
+          <tr><td>10</td><td>Enfermería</td><td>9,100</td><td>1.6%</td><td><span class="tag tag-b">Vigilancia</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div><!-- /main -->
+
+<footer>
+  <span>Fuente: SNIES · Sistema Nacional de Información de la Educación Superior · Universidad Nacional de Colombia</span>
+  <span>2018–2023 · 584,334 registros analizados · Creado con ❤️ para UNAL</span>
+</footer>
+
+<script>
+  // ── Chart.js global config ──
+  Chart.defaults.color = '#8fa3b8';
+  Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
+  Chart.defaults.font.family = "'DM Mono', monospace";
+  Chart.defaults.font.size = 11;
+
+  const C = {
+    red:'#f03e3e', amber:'#f59f00', teal:'#20c997', blue:'#4dabf7',
+    purple:'#cc5de8', green:'#51cf66', pink:'#f783ac', slate:'#748ffc',
+    grey:'#4a5568'
+  };
+  const YEARS = ['2018','2019','2020','2021','2022','2023'];
+  const ALPHA = (hex, a) => hex + Math.round(a*255).toString(16).padStart(2,'0');
+
+  // ── 1. Tendencia ──
+  new Chart(document.getElementById('c-tendencia'), {
+    type:'line',
+    data:{
+      labels:YEARS,
+      datasets:[
+        { label:'Pregrado', data:[5007,92748,85869,102696,102355,101309],
+          borderColor:C.red, backgroundColor:ALPHA(C.red,0.05), fill:true,
+          tension:0.4, borderWidth:2.5, pointRadius:4, pointHoverRadius:7, pointBackgroundColor:C.red },
+        { label:'Maestría', data:[1897,11317,10127,10232,9138,9481],
+          borderColor:C.blue, tension:0.4, borderWidth:2, pointRadius:3, pointHoverRadius:6, pointBackgroundColor:C.blue },
+        { label:'Especialización', data:[1656,4728,4576,4838,4171,4084],
+          borderColor:C.amber, tension:0.4, borderWidth:2, pointRadius:3, pointHoverRadius:6, pointBackgroundColor:C.amber },
+        { label:'Doctorado', data:[224,2690,2243,2318,2183,2248],
+          borderColor:C.teal, tension:0.4, borderWidth:2, pointRadius:3, pointHoverRadius:6, pointBackgroundColor:C.teal },
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'top', labels:{ boxWidth:8, padding:16, color: '#8fa3b8' } } },
+      scales:{
+        x:{ grid:{ color:'rgba(255,255,255,0.04)' } },
+        y:{ grid:{ color:'rgba(255,255,255,0.04)' }, ticks:{ callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v } }
+      }
+    }
+  });
+
+  // ── 2. Nivel donut ──
+  new Chart(document.getElementById('c-nivel-donut'), {
+    type:'doughnut',
+    data:{
+      labels:['Pregrado','Maestría','Especialización','Doctorado','Esp. Médicas'],
+      datasets:[{ data:[489984,52192,24053,11906,6199],
+        backgroundColor:[C.red,C.blue,C.amber,C.teal,C.purple],
+        borderColor:'#0d1624', borderWidth:3, hoverOffset:8 }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false, cutout:'65%',
+      plugins:{
+        legend:{ position:'bottom', labels:{ boxWidth:8, padding:12, color: '#8fa3b8' } },
+        tooltip:{ callbacks:{ label:ctx=>` ${ctx.label}: ${ctx.parsed.toLocaleString('es-CO')}` } }
+      }
+    }
+  });
+
+  // ── 3. Sedes bar ──
+  new Chart(document.getElementById('c-sedes-bar'), {
+    type:'bar',
+    data:{
+      labels:['Bogotá','Medellín','Manizales','Palmira','De La Paz','Tumaco','Orinoquía','Amazonía','Caribe'],
+      datasets:[{ label:'Estudiantes', data:[345217,130521,62613,31242,7154,2579,2310,1870,828],
+        backgroundColor:[C.red,C.blue,C.amber,C.teal,C.purple,C.green,C.pink,C.slate,C.grey],
+        borderRadius:5, borderSkipped:false }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{ legend:{ display:false } },
+      scales:{
+        x:{ grid:{ color:'rgba(255,255,255,0.04)' }, ticks:{ callback:v=>(v/1000).toFixed(0)+'K' } },
+        y:{ grid:{ display:false } }
+      }
+    }
+  });
+
+  // ── 4. Sede género ──
+  new Chart(document.getElementById('c-sede-genero'), {
+    type:'bar',
+    data:{
+      labels:['Bogotá','Medellín','Manizales','Palmira','De La Paz','Tumaco','Orinoquía','Amazonía','Caribe'],
+      datasets:[
+        { label:'Hombres', data:[208407,83095,40444,14610,3765,1381,1332,1027,412], backgroundColor:C.blue, borderRadius:4 },
+        { label:'Mujeres', data:[136810,47426,22169,16632,3389,1198,978,843,416], backgroundColor:C.pink, borderRadius:4 }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'top', labels:{ boxWidth:8, padding:14, color: '#8fa3b8' } } },
+      scales:{
+        x:{ grid:{ display:false }, ticks:{ font:{size:10}, maxRotation:30 } },
+        y:{ grid:{ color:'rgba(255,255,255,0.04)' }, ticks:{ callback:v=>(v/1000).toFixed(0)+'K' } }
+      }
+    }
+  });
+
+  // ── 5. Sedes evolución ──
+  new Chart(document.getElementById('c-sedes-evol'), {
+    type:'line',
+    data:{
+      labels:['2019','2020','2021','2022','2023'],
+      datasets:[
+        { label:'Bogotá',    data:[65868,65759,69487,69155,69830], borderColor:C.red, tension:0.4, borderWidth:2, pointRadius:3 },
+        { label:'Medellín',  data:[26825,16996,29533,28271,26913], borderColor:C.blue, tension:0.4, borderWidth:2, pointRadius:3 },
+        { label:'Manizales', data:[11958,12471,12706,12318,12006], borderColor:C.amber, tension:0.4, borderWidth:2, pointRadius:3 },
+        { label:'Palmira',   data:[6140,6178,6305,6066,5880], borderColor:C.teal, tension:0.4, borderWidth:2, pointRadius:3 },
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'top', labels:{ boxWidth:8, padding:12, color: '#8fa3b8' } } },
+      scales:{
+        x:{ grid:{ color:'rgba(255,255,255,0.04)' } },
+        y:{ grid:{ color:'rgba(255,255,255,0.04)' }, ticks:{ callback:v=>(v/1000).toFixed(0)+'K' } }
+      }
+    }
+  });
+
+  // ── 6. Estrato ──
+  new Chart(document.getElementById('c-estrato'), {
+    type:'bar',
+    data:{
+      labels:['Estrato 1','Estrato 2','Estrato 3','Estrato 4','Estrato 5','Estrato 6','ND/NE'],
+      datasets:[{ data:[87609,198051,178796,49018,10265,2695,57900],
+        backgroundColor:[C.red,C.amber,C.blue,C.teal,C.purple,C.green,C.grey],
+        borderRadius:4, borderSkipped:false }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ display:false } },
+      scales:{
+        x:{ grid:{ display:false }, ticks:{ font:{size:10}, maxRotation:30 } },
+        y:{ grid:{ color:'rgba(255,255,255,0.04)' }, ticks:{ callback:v=>(v/1000).toFixed(0)+'K' } }
+      }
+    }
+  });
+
+  // ── 7. Edad ──
+  new Chart(document.getElementById('c-edad'), {
+    type:'bar',
+    data:{
+      labels:['< 20','20–24','25–29','30–34','35–39','40+'],
+      datasets:[{ data:[110906,282558,118325,39616,17042,15887],
+        backgroundColor:[C.green,C.red,C.amber,C.blue,C.teal,C.purple],
+        borderRadius:4, borderSkipped:false }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ display:false } },
+      scales:{
+        x:{ grid:{ display:false } },
+        y:{ grid:{ color:'rgba(255,255,255,0.04)' }, ticks:{ callback:v=>(v/1000).toFixed(0)+'K' } }
+      }
+    }
+  });
+
+  // ── 8. Sexo donut ──
+  new Chart(document.getElementById('c-sexo-donut'), {
+    type:'doughnut',
+    data:{
+      labels:['Hombres','Mujeres'],
+      datasets:[{ data:[354473,229861],
+        backgroundColor:[C.blue,C.pink],
+        borderColor:'#0d1624', borderWidth:3, hoverOffset:8 }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false, cutout:'68%',
+      plugins:{
+        legend:{ position:'bottom', labels:{ boxWidth:8, padding:14, color: '#8fa3b8' } },
+        tooltip:{ callbacks:{ label:ctx=>` ${ctx.label}: ${ctx.parsed.toLocaleString('es-CO')} (${((ctx.parsed/584334)*100).toFixed(1)}%)` } }
+      }
+    }
+  });
+
+  // ── 9. Estrato por año ──
+  new Chart(document.getElementById('c-estrato-anio'), {
+    type:'line',
+    data:{
+      labels:YEARS,
+      datasets:[
+        { label:'Estrato 1', data:[610,13703,14345,18801,19684,20466], borderColor:C.red, tension:0.4, borderWidth:2, pointRadius:3 },
+        { label:'Estrato 2', data:[1839,36035,34915,41523,41844,41895], borderColor:C.amber, tension:0.4, borderWidth:2, pointRadius:3 },
+        { label:'Estrato 3', data:[1748,34164,32389,37072,36361,37062], borderColor:C.blue, tension:0.4, borderWidth:2, pointRadius:3 },
+        { label:'Estrato 4', data:[556,9691,9258,9976,9504,10033], borderColor:C.teal, tension:0.4, borderWidth:2, pointRadius:3 },
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'top', labels:{ boxWidth:8, padding:10, color: '#8fa3b8' } } },
+      scales:{
+        x:{ grid:{ color:'rgba(255,255,255,0.04)' } },
+        y:{ grid:{ color:'rgba(255,255,255,0.04)' }, ticks:{ callback:v=>(v/1000).toFixed(0)+'K' } }
+      }
+    }
+  });
+
+  // ── 10. HBar facultades ──
+  const facData = [
+    {name:'Ingeniería', val:79670},
+    {name:'Minas', val:72533},
+    {name:'Ciencias', val:68325},
+    {name:'Ciencias Humanas', val:51693},
+    {name:'Ing. y Arquitectura', val:38842},
+    {name:'Medicina', val:38043},
+    {name:'Artes', val:33117},
+    {name:'Ciencias Económicas', val:31470},
+  ];
+  const facColors = [C.red,C.amber,C.blue,C.teal,C.purple,C.green,C.pink,C.slate];
+  const maxFac = 79670;
+  const hbarEl = document.getElementById('hbar-facultad');
+  facData.forEach((d,i) => {
+    const pct = ((d.val/maxFac)*100).toFixed(0);
+    hbarEl.innerHTML += `
+      <div class="hbar-item">
+        <div class="hbar-meta">
+          <span class="hbar-name">${d.name}</span>
+          <span class="hbar-val">${d.val.toLocaleString('es-CO')}</span>
+        </div>
+        <div class="hbar-track">
+          <div class="hbar-fill" style="width:${pct}%;background:${facColors[i]}"></div>
+        </div>
+      </div>`;
+  });
+
+  // ── 11. Top programas ──
+  new Chart(document.getElementById('c-programas'), {
+    type:'bar',
+    data:{
+      labels:['Arquitectura','Ing. Civil','Medicina','Ing. Química','Economía','Zootecnia','Ing. Civil*','Derecho','Ing. Agronómica','Estadística'],
+      datasets:[{ data:[19918,16242,15712,14292,13282,11793,11150,10755,10632,10332],
+        backgroundColor:C.red, borderRadius:4, borderSkipped:false }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{ legend:{ display:false } },
+      scales:{
+        x:{ grid:{ color:'rgba(255,255,255,0.04)' }, ticks:{ callback:v=>(v/1000).toFixed(0)+'K' } },
+        y:{ grid:{ display:false }, ticks:{ font:{size:10} } }
+      }
+    }
+  });
+
+  // ── 12. Departamentos ──
+  new Chart(document.getElementById('c-deptos'), {
+    type:'doughnut',
+    data:{
+      labels:['Bogotá D.C.','Antioquia','Cundinamarca','Caldas','Valle del Cauca','Nariño','Boyacá','Otros'],
+      datasets:[{ data:[213750,81679,36015,35384,25197,24653,17352,150305],
+        backgroundColor:[C.red,C.blue,C.amber,C.teal,C.purple,C.green,C.pink,C.grey],
+        borderColor:'#0d1624', borderWidth:2, hoverOffset:6 }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false, cutout:'55%',
+      plugins:{
+        legend:{ position:'right', labels:{ boxWidth:8, padding:10, color: '#8fa3b8' } },
+        tooltip:{ callbacks:{ label:ctx=>` ${ctx.label}: ${ctx.parsed.toLocaleString('es-CO')}` } }
+      }
+    }
+  });
+
+  // ── 13. Facultad x nivel ──
+  new Chart(document.getElementById('c-fac-nivel'), {
+    type:'bar',
+    data:{
+      labels:['Ingeniería','Minas','Ciencias','Cs. Humanas','Ing. y Arq.','Medicina','Cs. Económicas','Artes'],
+      datasets:[
+        { label:'Pregrado',  data:[71231,62842,54601,44877,33149,27644,27305,26348], backgroundColor:C.red, borderRadius:3 },
+        { label:'Maestría',  data:[6031,4034,10185,4614,1915,3868,3849,5637], backgroundColor:C.blue, borderRadius:3 },
+        { label:'Doctorado', data:[1572,1441,2490,1313,724,603,316,272], backgroundColor:C.teal, borderRadius:3 },
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'top', labels:{ boxWidth:8, padding:14, color: '#8fa3b8' } } },
+      scales:{
+        x:{ grid:{ display:false }, ticks:{ font:{size:10}, maxRotation:20 } },
+        y:{ grid:{ color:'rgba(255,255,255,0.04)' }, ticks:{ callback:v=>(v/1000).toFixed(0)+'K' } }
+      }
+    }
+  });
+
+  // ── 14. Integración y Explorador de Tablas de Power BI (Datos Locales) ──
+  let originalHeaders = [];
+  let originalRows = [];
+  let filteredRows = [];
+  let currentPage = 1;
+  const rowsPerPage = 10;
+  let currentSortCol = null;
+  let currentSortDir = 'asc';
+  let activeFilters = {};
+  let currentSearchQuery = '';
+  let currentDatasetName = 'dataset_powerbi.csv';
+
+  const FILTERABLE_COLUMNS = ['anio', 'universidad', 'nivel', 'sexo', 'estado_estudiante', 'facultad', 'estrato'];
+
+  // Parse CSV character by character to handle commas in quotes correctly
+  function parseCSV(text) {
+    const lines = [];
+    let row = [];
+    let cell = '';
+    let inQuotes = false;
+    
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      const nextChar = text[i + 1];
+      
+      if (char === '"') {
+        if (inQuotes && nextChar === '"') {
+          cell += '"';
+          i++; // skip next quote
+        } else {
+          inQuotes = !inQuotes;
+        }
+      } else if (char === ',' && !inQuotes) {
+        row.push(cell.trim());
+        cell = '';
+      } else if ((char === '\r' || char === '\n') && !inQuotes) {
+        if (char === '\r' && nextChar === '\n') {
+          i++;
+        }
+        row.push(cell.trim());
+        if (row.length > 1 || row[0] !== '') {
+          lines.push(row);
+        }
+        row = [];
+        cell = '';
+      } else {
+        cell += char;
+      }
+    }
+    if (cell !== '' || row.length > 0) {
+      row.push(cell.trim());
+      lines.push(row);
+    }
+    return lines;
+  }
+
+  function formatHeaderName(header) {
+    const mapping = {
+      'anio': 'Año',
+      'universidad': 'Universidad',
+      'nivel': 'Nivel',
+      'sexo': 'Sexo',
+      'estado_estudiante': 'Estado',
+      'facultad': 'Facultad',
+      'estrato': 'Estrato',
+      'programa': 'Programa',
+      'departamento': 'Departamento',
+      'total_matriculados': 'Matriculados',
+      'total_graduados': 'Graduados',
+      'tasa_graduacion': 'Tasa Grad.',
+      'balance_matricula_menos_graduacion': 'Balance',
+      'cantidad_real': 'Cantidad'
+    };
+    const key = header.toLowerCase().trim();
+    if (mapping[key]) return mapping[key];
+    return header.charAt(0).toUpperCase() + header.slice(1).replace(/_/g, ' ');
+  }
+
+  async function switchLocalDataset(filename, btnElement) {
+    const buttons = document.querySelectorAll('.pbi-tab-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    if (btnElement) {
+      btnElement.classList.add('active');
+    }
+    
+    currentDatasetName = filename;
+    currentSortCol = null;
+    currentSortDir = 'asc';
+    activeFilters = {};
+    currentSearchQuery = '';
+    const searchInput = document.getElementById('pbi-search-input');
+    if (searchInput) searchInput.value = '';
+    
+    await loadLocalData(filename);
+  }
+
+  async function loadLocalData(filename) {
+    try {
+      const response = await fetch(`./tablas/${filename}`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const text = await response.text();
+      const rows = parseCSV(text);
+      if (rows.length === 0) return;
+      
+      originalHeaders = rows[0];
+      originalRows = rows.slice(1);
+      filteredRows = [...originalRows];
+      
+      buildFilters();
+      applyFiltersAndSearch();
+    } catch (error) {
+      console.error("Error loading CSV:", error);
+      alert(`Error al cargar el archivo de datos: ${error.message}`);
+    }
+  }
+
+  function buildFilters() {
+    const filtersRow = document.getElementById('pbi-filters-row');
+    if (!filtersRow) return;
+    filtersRow.innerHTML = '';
+    
+    originalHeaders.forEach((header, index) => {
+      const headerLower = header.toLowerCase().trim();
+      if (FILTERABLE_COLUMNS.includes(headerLower)) {
+        const uniqueValues = [...new Set(originalRows.map(row => row[index]))]
+          .filter(val => val !== undefined && val !== null && val.trim() !== '')
+          .sort();
+          
+        if (uniqueValues.length <= 1) return;
+        
+        const label = formatHeaderName(header);
+        const select = document.createElement('select');
+        select.className = 'pbi-select';
+        select.id = `filter-${headerLower}`;
+        select.innerHTML = `<option value="">Filtrar por ${label} (Todos)</option>`;
+        
+        uniqueValues.forEach(val => {
+          select.innerHTML += `<option value="${val}">${val}</option>`;
+        });
+        
+        select.addEventListener('change', (e) => {
+          if (e.target.value === '') {
+            delete activeFilters[index];
+          } else {
+            activeFilters[index] = e.target.value;
+          }
+          applyFiltersAndSearch();
+        });
+        
+        filtersRow.appendChild(select);
+      }
+    });
+  }
+
+  function applyFiltersAndSearch() {
+    filteredRows = originalRows.filter(row => {
+      for (const [colIndex, filterVal] of Object.entries(activeFilters)) {
+        if (row[colIndex] !== filterVal) {
+          return false;
+        }
+      }
+      
+      if (currentSearchQuery.trim() !== '') {
+        const query = currentSearchQuery.toLowerCase();
+        const matches = row.some(cell => {
+          if (cell === undefined || cell === null) return false;
+          return cell.toString().toLowerCase().includes(query);
+        });
+        if (!matches) return false;
+      }
+      
+      return true;
+    });
+    
+    if (currentSortCol !== null) {
+      sortData(currentSortCol, currentSortDir, false);
+    } else {
+      currentPage = 1;
+      renderTable();
+    }
+  }
+
+  function handleHeaderClick(index) {
+    if (currentSortCol === index) {
+      currentSortDir = currentSortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      currentSortCol = index;
+      currentSortDir = 'asc';
+    }
+    sortData(index, currentSortDir, true);
+  }
+
+  function sortData(colIndex, direction, doRender = true) {
+    filteredRows.sort((a, b) => {
+      let valA = a[colIndex] || '';
+      let valB = b[colIndex] || '';
+      
+      const numA = parseFloat(valA.replace(/,/g, ''));
+      const numB = parseFloat(valB.replace(/,/g, ''));
+      if (!isNaN(numA) && !isNaN(numB)) {
+        return direction === 'asc' ? numA - numB : numB - numA;
+      }
+      
+      return direction === 'asc' 
+        ? valA.localeCompare(valB, 'es', { numeric: true }) 
+        : valB.localeCompare(valA, 'es', { numeric: true });
+    });
+    
+    if (doRender) {
+      currentPage = 1;
+      renderTable();
+    }
+  }
+
+  function handleSearch(query) {
+    currentSearchQuery = query;
+    applyFiltersAndSearch();
+  }
+
+  function updatePaginationInfo(start, end, total) {
+    document.getElementById('pbi-page-start').textContent = start;
+    document.getElementById('pbi-page-end').textContent = end;
+    document.getElementById('pbi-page-total').textContent = total;
+  }
+
+  function renderPaginationControls(totalPages) {
+    const container = document.getElementById('pbi-pagination-controls');
+    if (!container) return;
+    container.innerHTML = '';
+    
+    if (totalPages <= 1) return;
+    
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'pbi-page-btn';
+    prevBtn.innerHTML = '« Ant.';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTable();
+      }
+    });
+    container.appendChild(prevBtn);
+    
+    for (let i = 1; i <= totalPages; i++) {
+      const pageBtn = document.createElement('button');
+      pageBtn.className = `pbi-page-btn ${currentPage === i ? 'active' : ''}`;
+      pageBtn.textContent = i;
+      pageBtn.addEventListener('click', () => {
+        currentPage = i;
+        renderTable();
+      });
+      container.appendChild(pageBtn);
+    }
+    
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'pbi-page-btn';
+    nextBtn.innerHTML = 'Sig. »';
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.addEventListener('click', () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTable();
+      }
+    });
+    container.appendChild(nextBtn);
+  }
+
+  function renderTable() {
+    const thead = document.getElementById('pbi-table-head');
+    const tbody = document.getElementById('pbi-table-body');
+    const noResultsMsg = document.getElementById('pbi-no-results-msg');
+    
+    if (!thead || !tbody) return;
+    
+    thead.innerHTML = '';
+    tbody.innerHTML = '';
+    
+    const trHead = document.createElement('tr');
+    originalHeaders.forEach((header, index) => {
+      const th = document.createElement('th');
+      th.style.cursor = 'pointer';
+      
+      let indicator = '';
+      if (currentSortCol === index) {
+        th.className = currentSortDir === 'asc' ? 'sort-asc' : 'sort-desc';
+        indicator = currentSortDir === 'asc' ? ' ▲' : ' ▼';
+      }
+      
+      th.innerHTML = `${formatHeaderName(header)}${indicator}`;
+      th.addEventListener('click', () => handleHeaderClick(index));
+      trHead.appendChild(th);
+    });
+    thead.appendChild(trHead);
+    
+    const totalRows = filteredRows.length;
+    const startIdx = (currentPage - 1) * rowsPerPage;
+    const endIdx = Math.min(startIdx + rowsPerPage, totalRows);
+    
+    if (totalRows === 0) {
+      noResultsMsg.style.display = 'block';
+      updatePaginationInfo(0, 0, 0);
+      renderPaginationControls(0);
+      return;
+    } else {
+      noResultsMsg.style.display = 'none';
+    }
+    
+    const pageRows = filteredRows.slice(startIdx, endIdx);
+    
+    pageRows.forEach(row => {
+      const tr = document.createElement('tr');
+      row.forEach((cell, cellIndex) => {
+        const td = document.createElement('td');
+        const headerLower = originalHeaders[cellIndex].toLowerCase().trim();
+        
+        let content = cell;
+        
+        const numVal = parseFloat(cell);
+        if (!isNaN(numVal) && (headerLower.includes('total') || headerLower.includes('tasa') || headerLower.includes('balance') || headerLower.includes('cantidad') || headerLower === 'anio')) {
+          td.style.textAlign = 'right';
+          if (headerLower.includes('tasa')) {
+            content = (numVal * 100).toFixed(1) + '%';
+          } else if (headerLower === 'anio') {
+            content = cell;
+          } else {
+            content = numVal.toLocaleString('es-CO');
+          }
+        }
+        
+        if (cell === 'true' || cell === 'false') {
+          const isTrue = cell === 'true';
+          td.style.textAlign = 'center';
+          content = `<span class="tag ${isTrue ? 'tag-r' : 'tag-g'}">${isTrue ? 'Sí' : 'No'}</span>`;
+        }
+        
+        td.innerHTML = content;
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    
+    updatePaginationInfo(startIdx + 1, endIdx, totalRows);
+    const totalPages = Math.ceil(totalRows / rowsPerPage);
+    renderPaginationControls(totalPages);
+  }
+
+  function exportFilteredData() {
+    if (filteredRows.length === 0) {
+      alert("No hay datos para exportar.");
+      return;
+    }
+    
+    const formatCell = (val) => {
+      if (val === undefined || val === null) return '';
+      let str = val.toString();
+      if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+        str = '"' + str.replace(/"/g, '""') + '"';
+      }
+      return str;
+    };
+    
+    const csvLines = [originalHeaders.map(formatCell).join(',')];
+    filteredRows.forEach(row => {
+      csvLines.push(row.map(formatCell).join(','));
+    });
+    
+    const csvContent = csvLines.join('\n');
+    const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    const cleanFilename = currentDatasetName.replace('.csv', '');
+    link.download = `${cleanFilename}_filtrado_${new Date().toISOString().slice(0, 10)}.csv`;
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const defaultBtn = document.querySelector('.pbi-tab-btn.active');
+    switchLocalDataset('dataset_powerbi.csv', defaultBtn);
+  });
+</script>
+</body>
+</html>
