@@ -1,19 +1,102 @@
 <div class="home-page fade-in">
-  <!-- HERO SECTION -->
-  <section class="hero-section">
-    <div class="hero-accent"></div>
-    <div class="hero-eyebrow">Análisis de deserción estudiantil</div>
-    <h1 class="hero-title">DESERCIÓN<br><em>EN LA UNAL</em></h1>
-    <p class="hero-desc">
-      Plataforma de analítica avanzada que procesa 584,334 registros de matrícula (2018–2023) 
-      para identificar patrones, evaluar factores socioeconómicos y diseñar estrategias de retención 
-      basadas en evidencia para la Universidad Nacional de Colombia.
-    </p>
-    <div class="hero-cta-wrapper">
-      <button class="cta-button" (click)="goToDashboard()">
-        Acceder al Dashboard
-        <span class="cta-icon">→</span>
+  <!-- LOADING SPINNER -->
+  @if (isLoading) {
+    <div class="loader-overlay">
+      <div class="spinner-container">
+        <div class="cyber-spinner"></div>
+        <div class="spinner-brand">UN</div>
+      </div>
+      <p class="loader-text">Procesando Base de Datos Local...</p>
+      <p class="loader-sub">Calculando agregaciones estadísticas en tiempo real</p>
+    </div>
+  }
+
+  <!-- HEADER SECTION -->
+  <header class="dashboard-home-header">
+    <div class="header-accent"></div>
+    <div class="header-top">
+      <div class="hero-eyebrow">Analítica de Permanencia Universitaria</div>
+      <button class="powerbi-toggle-btn" (click)="goToDashboard()">
+        <span class="pbi-icon">📊</span> Ver Dashboard Power BI Oficial
       </button>
+    </div>
+    <h1 class="hero-title">ANALÍTICA DE <em>DESERCIÓN</em></h1>
+    <p class="hero-desc">
+      Tablero interactivo nativo recreado a partir del modelo de datos de Power BI. Filtra dinámicamente
+      los 584,334 registros académicos consolidados por universidad, sede y programa.
+    </p>
+  </header>
+
+  <!-- FILTER GRID SECTION -->
+  <section class="filters-section" aria-label="Filtros del Tablero">
+    <div class="filters-card">
+      <div class="filters-grid">
+        <div class="filter-group">
+          <label>Universidad / Sede</label>
+          <select [(ngModel)]="selectedUniversidad" (change)="onFilterChange()">
+            <option value="">(Todas las Sedes)</option>
+            @for (uni of universidades; track uni) {
+              <option [value]="uni">{{ uni }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Año Académico</label>
+          <select [(ngModel)]="selectedAnio" (change)="onFilterChange()">
+            <option value="">(Todos los Años)</option>
+            @for (anio of anios; track anio) {
+              <option [value]="anio">{{ anio }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Nivel de Formación</label>
+          <select [(ngModel)]="selectedNivel" (change)="onFilterChange()">
+            <option value="">(Todos los Niveles)</option>
+            @for (niv of niveles; track niv) {
+              <option [value]="niv">{{ niv }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Sexo</label>
+          <select [(ngModel)]="selectedSexo" (change)="onFilterChange()">
+            <option value="">(Todos los Sexos)</option>
+            @for (sx of sexos; track sx) {
+              <option [value]="sx">{{ sx }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Facultad</label>
+          <select [(ngModel)]="selectedFacultad" (change)="onFilterChange()">
+            <option value="">(Todas las Facultades)</option>
+            @for (fac of facultades; track fac) {
+              <option [value]="fac">{{ fac }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Departamento Procedencia</label>
+          <select [(ngModel)]="selectedDepartamento" (change)="onFilterChange()">
+            <option value="">(Todos los Deptos)</option>
+            @for (dept of departamentos; track dept) {
+              <option [value]="dept">{{ dept }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="filters-actions">
+        <button class="clear-btn" (click)="clearFilters()">
+          🧹 Limpiar Filtros
+        </button>
+      </div>
     </div>
   </section>
 
@@ -22,139 +105,204 @@
     <div class="kpi-strip">
       <div class="kpi">
         <div class="kpi-top-bar" style="background: var(--red)"></div>
-        <div class="kpi-label">Total registros</div>
-        <div class="kpi-value">584K</div>
-        <div class="kpi-sub">2018 – 2023</div>
-        <div class="kpi-badge badge-red">+30% vs 2019</div>
-      </div>
-      
-      <div class="kpi">
-        <div class="kpi-top-bar" style="background: var(--amber)"></div>
-        <div class="kpi-label">Pregrado</div>
-        <div class="kpi-value">489K</div>
-        <div class="kpi-sub">83.8% del total</div>
-        <div class="kpi-badge badge-red">Mayor riesgo</div>
+        <div class="kpi-label">Registros Coincidentes</div>
+        <div class="kpi-value">{{ totalRegistros | number }}</div>
+        <div class="kpi-sub">Filas agregadas en consulta</div>
+        <div class="kpi-badge badge-red">Datos locales</div>
       </div>
       
       <div class="kpi">
         <div class="kpi-top-bar" style="background: var(--blue)"></div>
-        <div class="kpi-label">Sedes</div>
-        <div class="kpi-value">9</div>
-        <div class="kpi-sub">Bogotá lidera 59%</div>
-        <div class="kpi-badge badge-blue">Nacional</div>
-      </div>
-      
-      <div class="kpi">
-        <div class="kpi-top-bar" style="background: var(--purple)"></div>
-        <div class="kpi-label">Brecha género</div>
-        <div class="kpi-value">61/39</div>
-        <div class="kpi-sub">Hombres / Mujeres</div>
-        <div class="kpi-badge badge-red">Alta desigualdad</div>
-      </div>
-      
-      <div class="kpi">
-        <div class="kpi-top-bar" style="background: var(--teal)"></div>
-        <div class="kpi-label">Estrato vulnerable</div>
-        <div class="kpi-value">48.5%</div>
-        <div class="kpi-sub">Estratos 1 y 2</div>
-        <div class="kpi-badge badge-red">Mayor riesgo</div>
+        <div class="kpi-label">Total Matriculados</div>
+        <div class="kpi-value">{{ totalMatriculados | number }}</div>
+        <div class="kpi-sub">Estudiantes en periodo</div>
+        <div class="kpi-badge badge-blue">Matrícula</div>
       </div>
       
       <div class="kpi">
         <div class="kpi-top-bar" style="background: var(--green)"></div>
-        <div class="kpi-label">Edad predominante</div>
-        <div class="kpi-value">20–24</div>
-        <div class="kpi-sub">48% de estudiantes</div>
-        <div class="kpi-badge badge-green">Foco de atención</div>
+        <div class="kpi-label">Total Graduados</div>
+        <div class="kpi-value">{{ totalGraduados | number }}</div>
+        <div class="kpi-sub">Estudiantes titulados</div>
+        <div class="kpi-badge badge-green">Titulaciones</div>
+      </div>
+      
+      <div class="kpi">
+        <div class="kpi-top-bar" style="background: var(--amber)"></div>
+        <div class="kpi-label">Tasa Deserción Estimada</div>
+        <div class="kpi-value">{{ tasaDesercionPromedio | number:'1.1-2' }}%</div>
+        <div class="kpi-sub">Complemento de titulación</div>
+        <div class="kpi-badge badge-red">Riesgo calculado</div>
       </div>
     </div>
   </section>
 
-  <!-- CONTEXT SECTION -->
-  <section class="context-section">
-    <div class="section-label">Contexto del Fenómeno <small>Desafío institucional en educación superior</small></div>
-    <p class="section-lead-text">
-      La deserción estudiantil en la Universidad Nacional de Colombia representa un reto multidimensional.
-      Comprender sus dinámicas en las distintas sedes y facultades es fundamental para fortalecer el 
-      acompañamiento institucional y asegurar la permanencia.
-    </p>
-
-    <div class="cards-grid">
-      <div class="info-card">
-        <div class="card-icon red-bg">📉</div>
-        <h3 class="card-title">Deserción Institucional</h3>
-        <p class="card-text">
-          La alta tasa acumulada de desvinculación refleja la complejidad de factores que influyen en que 
-          los estudiantes pausen o abandonen sus programas académicos.
-        </p>
+  <!-- CHARTS SECTION GRID -->
+  <section class="charts-grid-section">
+    <div class="section-label">Gráficas del Tablero <small>Recreación nativa dinámica</small></div>
+    
+    <div class="charts-container-grid">
+      <!-- Chart 1: Matriculados vs Graduados -->
+      <div class="chart-card large-chart">
+        <div class="chart-header">
+          <h3>Evolución Histórica: Matriculados vs Graduados</h3>
+          <span class="chart-desc">Comparativa anual histórica agregada</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chart-matriculados-graduados"></canvas>
+        </div>
       </div>
 
-      <div class="info-card">
-        <div class="card-icon amber-bg">💰</div>
-        <h3 class="card-title">Impacto Socioeconómico</h3>
-        <p class="card-text">
-          Las principales causas están asociadas a dificultades financieras, vulnerabilidades familiares, 
-          falta de orientación vocacional previa y retos en la adaptación universitaria.
-        </p>
+      <!-- Chart 2: Tasa Deserción por Facultad -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Tasa de Deserción por Facultad</h3>
+          <span class="chart-desc">Frecuencia estimada de deserción (Top 10)</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chart-tasa-desercion-facultad"></canvas>
+        </div>
       </div>
 
-      <div class="info-card">
-        <div class="card-icon blue-bg">🌍</div>
-        <h3 class="card-title">Brecha de Equidad</h3>
-        <p class="card-text">
-          El fenómeno afecta con mayor fuerza a estudiantes de estratos socioeconómicos 1 y 2, 
-          quienes requieren de un esquema robusto de bienestar estudiantil y apoyos económicos.
-        </p>
+      <!-- Chart 3: Distribución Nivel Académico -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Distribución por Nivel Académico</h3>
+          <span class="chart-desc">Matriculados por nivel de formación</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chart-nivel-academico"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 4: Top 10 Programas -->
+      <div class="chart-card large-chart">
+        <div class="chart-header">
+          <h3>Top 10 Programas por Matrícula</h3>
+          <span class="chart-desc">Programas con mayor número de estudiantes</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chart-programas-estudiantes"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 5: Estudiantes por Sexo -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Distribución por Sexo</h3>
+          <span class="chart-desc">Proporción de estudiantes matriculados</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chart-sexo-estudiantes"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 6: Depto Procedencia -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Departamento de Procedencia</h3>
+          <span class="chart-desc">Top 8 departamentos y otros consolidados</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chart-departamento-procedencia"></canvas>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- IMPORTANCE & BENEFITS SECTION -->
-  <section class="importance-section">
-    <div class="section-label">Importancia del Análisis <small>De los datos a la toma de decisiones estratégicas</small></div>
-    <div class="importance-grid">
-      <div class="importance-text">
-        <p class="section-description">
-          Identificar y caracterizar la población estudiantil permite a los comités académicos diseñar 
-          estrategias preventivas basadas en evidencia cuantitativa estructurada.
-        </p>
+  <!-- DATA TABLE EXPLORER SECTION -->
+  <section class="explorer-section">
+    <div class="section-label">Explorador de Datos <small>Reporte consolidado del modelo</small></div>
+    
+    <div class="table-card">
+      <div class="table-toolbar">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input 
+            type="text" 
+            [(ngModel)]="searchText" 
+            (input)="applyFilters()" 
+            placeholder="Buscar por programa, facultad, depto..."
+          />
+        </div>
         
-        <ul class="benefits-list">
-          <li class="benefit-item">
-            <span class="benefit-bullet">🎯</span>
-            <div class="benefit-body">
-              <h4 class="benefit-title">Intervención Temprana</h4>
-              <p class="benefit-desc">Establecer sistemas de alerta temprana basados en el historial académico y la procedencia.</p>
-            </div>
-          </li>
-          <li class="benefit-item">
-            <span class="benefit-bullet">💡</span>
-            <div class="benefit-body">
-              <h4 class="benefit-title">Políticas Efectivas de Bienestar</h4>
-              <p class="benefit-desc">Asignar subsidios de transporte, alimentación y alojamiento a los núcleos de mayor riesgo.</p>
-            </div>
-          </li>
-          <li class="benefit-item">
-            <span class="benefit-bullet">📈</span>
-            <div class="benefit-body">
-              <h4 class="benefit-title">Optimización Curricular</h4>
-              <p class="benefit-desc">Revisar los cuellos de botella en asignaturas críticas del ciclo básico que incrementan la deserción.</p>
-            </div>
-          </li>
-        </ul>
+        <button class="export-btn" (click)="exportCSV()">
+          📥 Exportar CSV
+        </button>
       </div>
 
-      <div class="importance-visual">
-        <div class="visual-card">
-          <div class="visual-glow"></div>
-          <div class="visual-content">
-            <span class="visual-icon">📊</span>
-            <h3 class="visual-title">Visualización Interactiva</h3>
-            <p class="visual-desc">Explora el reporte oficial de Power BI consolidado con filtros interactivos.</p>
-            <button class="secondary-button" (click)="goToDashboard()">
-              Ver Dashboard Interactivo
-            </button>
-          </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th (click)="setSort('anio')">
+                Año <span class="sort-indicator">{{ sortColumn === 'anio' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
+              </th>
+              <th (click)="setSort('universidad')">
+                Sede <span class="sort-indicator">{{ sortColumn === 'universidad' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
+              </th>
+              <th (click)="setSort('programa')">
+                Programa <span class="sort-indicator">{{ sortColumn === 'programa' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
+              </th>
+              <th (click)="setSort('facultad')">
+                Facultad <span class="sort-indicator">{{ sortColumn === 'facultad' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
+              </th>
+              <th (click)="setSort('nivel')">
+                Nivel <span class="sort-indicator">{{ sortColumn === 'nivel' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
+              </th>
+              <th (click)="setSort('sexo')">
+                Sexo <span class="sort-indicator">{{ sortColumn === 'sexo' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
+              </th>
+              <th (click)="setSort('departamento')">
+                Procedencia <span class="sort-indicator">{{ sortColumn === 'departamento' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
+              </th>
+              <th class="num-col" (click)="setSort('total_matriculados')">
+                Matriculados <span class="sort-indicator">{{ sortColumn === 'total_matriculados' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
+              </th>
+              <th class="num-col" (click)="setSort('total_graduados')">
+                Graduados <span class="sort-indicator">{{ sortColumn === 'total_graduados' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (paginatedRecords.length > 0) {
+              @for (row of paginatedRecords; track row) {
+                <tr>
+                  <td>{{ row.anio }}</td>
+                  <td><span class="badge-sede">{{ row.universidad }}</span></td>
+                  <td class="text-highlight">{{ row.programa }}</td>
+                  <td>{{ row.facultad }}</td>
+                  <td>{{ row.nivel }}</td>
+                  <td>{{ row.sexo }}</td>
+                  <td>{{ row.departamento }}</td>
+                  <td class="num-col font-mono">{{ row.total_matriculados | number }}</td>
+                  <td class="num-col font-mono">{{ row.total_graduados | number }}</td>
+                </tr>
+              }
+            } @else {
+              <tr>
+                <td colspan="9" class="no-records">No se encontraron registros que coincidan con la búsqueda.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-pagination">
+        <div class="pagination-info">
+          Mostrando {{ filteredRecords.length > 0 ? (currentPage - 1) * pageSize + 1 : 0 }} - 
+          {{ (currentPage * pageSize) > filteredRecords.length ? filteredRecords.length : (currentPage * pageSize) }} 
+          de {{ filteredRecords.length }} registros
+        </div>
+        
+        <div class="pagination-controls">
+          <button (click)="prevPage()" [disabled]="currentPage === 1" class="page-btn">
+            ◀ Anterior
+          </button>
+          <span class="page-number">Página <strong>{{ currentPage }}</strong> de {{ totalPages }}</span>
+          <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="page-btn">
+            Siguiente ▶
+          </button>
         </div>
       </div>
     </div>
@@ -163,9 +311,9 @@
   <!-- FOOTER -->
   <footer class="home-footer">
     <div class="footer-left">
-      <span>UNIVERSIDAD NACIONAL DE COLOMBIA</span>
+      <span>REPLICADOR DE TABLAS POWER BI</span>
       <span class="divider">|</span>
-      <span>DASHBOARD ANALÍTICO DE DESERCIÓN</span>
+      <span>ANÁLISIS ESTUDIANTIL INTEGRADO</span>
     </div>
     <div class="footer-right">
       <span>SNIES · 2026</span>
