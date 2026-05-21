@@ -1,140 +1,36 @@
 <div class="home-page fade-in">
-  <!-- LOADING SPINNER -->
-  @if (isLoading) {
-    <div class="loader-overlay">
-      <div class="spinner-container">
-        <div class="cyber-spinner"></div>
-        <div class="spinner-brand">UN</div>
-      </div>
-      <p class="loader-text">Procesando Base de Datos Local...</p>
-      <p class="loader-sub">Calculando agregaciones estadísticas en tiempo real</p>
-    </div>
-  }
-
   <!-- HEADER SECTION -->
   <header class="dashboard-home-header">
     <div class="header-accent"></div>
     <div class="header-top">
       <div class="hero-eyebrow">Analítica de Permanencia Universitaria</div>
-      <button class="powerbi-toggle-btn" (click)="goToDashboard()">
-        <span class="pbi-icon">📊</span> Ver Dashboard Power BI Oficial
-      </button>
+      <div class="pulse-wrapper">
+        <div class="pulse-dot"></div>
+        <span class="pulse-text">Conexión Oficial Power BI</span>
+      </div>
     </div>
     <h1 class="hero-title">ANALÍTICA DE <em>DESERCIÓN</em></h1>
     <p class="hero-desc">
-      Tablero interactivo nativo recreado a partir del modelo de datos de Power BI. Filtra dinámicamente
-      los 584,334 registros académicos consolidados por universidad, sede y programa.
+      Tablero interactivo oficial de la deserción estudiantil en la Universidad Nacional de Colombia (UNAL). 
+      Analiza la permanencia y graduación en base a los 584,334 registros históricos consolidados.
     </p>
   </header>
 
-  <!-- FILTER GRID SECTION -->
-  <section class="filters-section" aria-label="Filtros del Tablero">
-    <div class="filters-card">
-      <div class="filters-grid">
-        <div class="filter-group">
-          <label>Universidad / Sede</label>
-          <select [(ngModel)]="selectedUniversidad" (change)="onFilterChange()">
-            <option value="">(Todas las Sedes)</option>
-            @for (uni of universidades; track uni) {
-              <option [value]="uni">{{ uni }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="filter-group">
-          <label>Año Académico</label>
-          <select [(ngModel)]="selectedAnio" (change)="onFilterChange()">
-            <option value="">(Todos los Años)</option>
-            @for (anio of anios; track anio) {
-              <option [value]="anio">{{ anio }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="filter-group">
-          <label>Semestre Académico</label>
-          <select [(ngModel)]="selectedSemestre" (change)="onFilterChange()">
-            <option value="">(Todos los Semestres)</option>
-            @for (sem of semestres; track sem) {
-              <option [value]="sem">Semestre {{ sem }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="filter-group">
-          <label>Nivel de Formación</label>
-          <select [(ngModel)]="selectedNivel" (change)="onFilterChange()">
-            <option value="">(Todos los Niveles)</option>
-            @for (niv of niveles; track niv) {
-              <option [value]="niv">{{ niv }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="filter-group">
-          <label>Sexo</label>
-          <select [(ngModel)]="selectedSexo" (change)="onFilterChange()">
-            <option value="">(Todos los Sexos)</option>
-            @for (sx of sexos; track sx) {
-              <option [value]="sx">{{ sx }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="filter-group">
-          <label>Facultad</label>
-          <select [(ngModel)]="selectedFacultad" (change)="onFilterChange()">
-            <option value="">(Todas las Facultades)</option>
-            @for (fac of facultades; track fac) {
-              <option [value]="fac">{{ fac }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="filter-group">
-          <label>Programa Académico</label>
-          <select [(ngModel)]="selectedPrograma" (change)="onFilterChange()">
-            <option value="">(Todos los Programas)</option>
-            @for (prog of availableProgramas; track prog) {
-              <option [value]="prog">{{ prog }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="filter-group">
-          <label>Departamento Procedencia</label>
-          <select [(ngModel)]="selectedDepartamento" (change)="onFilterChange()">
-            <option value="">(Todos los Deptos)</option>
-            @for (dept of departamentos; track dept) {
-              <option [value]="dept">{{ dept }}</option>
-            }
-          </select>
-        </div>
-      </div>
-
-      <div class="filters-actions">
-        <button class="clear-btn" (click)="clearFilters()">
-          🧹 Limpiar Filtros
-        </button>
-      </div>
-    </div>
-  </section>
-
   <!-- KPI STRIP -->
-  <section class="kpi-section" aria-label="Indicadores Clave">
+  <section class="kpi-section" aria-label="Indicadores Clave Consolidados">
     <div class="kpi-strip">
       <div class="kpi">
         <div class="kpi-top-bar" style="background: var(--red)"></div>
-        <div class="kpi-label">Registros Coincidentes</div>
-        <div class="kpi-value">{{ totalRegistros | number }}</div>
-        <div class="kpi-sub">Filas agregadas en consulta</div>
-        <div class="kpi-badge badge-red">Datos locales</div>
+        <div class="kpi-label">Registros Históricos</div>
+        <div class="kpi-value">584,334</div>
+        <div class="kpi-sub">Total filas consolidadas</div>
+        <div class="kpi-badge badge-red">SNIES Oficial</div>
       </div>
       
       <div class="kpi">
         <div class="kpi-top-bar" style="background: var(--blue)"></div>
         <div class="kpi-label">Total Matriculados</div>
-        <div class="kpi-value">{{ totalMatriculados | number }}</div>
+        <div class="kpi-value">534,411</div>
         <div class="kpi-sub">Estudiantes en periodo</div>
         <div class="kpi-badge badge-blue">Matrícula</div>
       </div>
@@ -142,188 +38,75 @@
       <div class="kpi">
         <div class="kpi-top-bar" style="background: var(--green)"></div>
         <div class="kpi-label">Total Graduados</div>
-        <div class="kpi-value">{{ totalGraduados | number }}</div>
+        <div class="kpi-value">49,923</div>
         <div class="kpi-sub">Estudiantes titulados</div>
         <div class="kpi-badge badge-green">Titulaciones</div>
       </div>
       
       <div class="kpi">
         <div class="kpi-top-bar" style="background: var(--amber)"></div>
-        <div class="kpi-label">Tasa Deserción Estimada</div>
-        <div class="kpi-value">{{ tasaDesercionPromedio | number:'1.1-2' }}%</div>
+        <div class="kpi-label">Tasa Deserción Promedio</div>
+        <div class="kpi-value">90.66%</div>
         <div class="kpi-sub">Complemento de titulación</div>
         <div class="kpi-badge badge-red">Riesgo calculado</div>
       </div>
     </div>
   </section>
 
-  <!-- CHARTS SECTION GRID -->
-  <section class="charts-grid-section">
-    <div class="section-label">Gráficas del Tablero <small>Recreación nativa dinámica</small></div>
+  <!-- DASHBOARD CONTENT / IFRAME -->
+  <section class="dashboard-section" aria-label="Tablero Interactivo Power BI">
+    <div class="section-label">Reporte Interactivo Oficial <small>Visualización integrada</small></div>
     
-    <div class="charts-container-grid">
-      <!-- Chart 1: Matriculados vs Graduados -->
-      <div class="chart-card large-chart">
-        <div class="chart-header">
-          <h3>Evolución Histórica: Matriculados vs Graduados</h3>
-          <span class="chart-desc">Comparativa semestral histórica agregada</span>
+    <div class="iframe-card">
+      <div class="card-glow"></div>
+      
+      <!-- Loading Animation Overlay -->
+      @if (isLoading) {
+        <div class="loader-overlay-inline">
+          <div class="spinner-container">
+            <div class="cyber-spinner"></div>
+            <div class="spinner-brand">UN</div>
+          </div>
+          <p class="loader-text">Cargando Tablero Power BI...</p>
+          <p class="loader-sub">Estableciendo conexión segura con los servidores de Microsoft</p>
         </div>
-        <div class="chart-wrapper">
-          <canvas id="chart-matriculados-graduados"></canvas>
-        </div>
-      </div>
+      }
 
-      <!-- Chart 2: Brecha vs Tasa de Deserción por Periodo -->
-      <div class="chart-card large-chart">
-        <div class="chart-header">
-          <h3>Brecha y Tasa de Deserción por Periodo</h3>
-          <span class="chart-desc">Diferencia de matrícula y tasa de deserción estimada</span>
-        </div>
-        <div class="chart-wrapper">
-          <canvas id="chart-brecha-tasa-periodo"></canvas>
-        </div>
-      </div>
-
-      <!-- Chart 3: Tasa Deserción por Facultad -->
-      <div class="chart-card">
-        <div class="chart-header">
-          <h3>Tasa de Deserción por Facultad</h3>
-          <span class="chart-desc">Frecuencia estimada de deserción (Top 10)</span>
-        </div>
-        <div class="chart-wrapper">
-          <canvas id="chart-tasa-desercion-facultad"></canvas>
-        </div>
-      </div>
-
-      <!-- Chart 4: Tasa Deserción por Programa -->
-      <div class="chart-card large-chart">
-        <div class="chart-header">
-          <h3>Tasa de Deserción por Programa</h3>
-          <span class="chart-desc">Programas con mayor tasa de deserción (Top 15)</span>
-        </div>
-        <div class="chart-wrapper">
-          <canvas id="chart-tasa-desercion-programa"></canvas>
-        </div>
-      </div>
-
-      <!-- Chart 5: Estudiantes por Sexo -->
-      <div class="chart-card">
-        <div class="chart-header">
-          <h3>Distribución por Sexo</h3>
-          <span class="chart-desc">Proporción de estudiantes matriculados</span>
-        </div>
-        <div class="chart-wrapper">
-          <canvas id="chart-sexo-estudiantes"></canvas>
-        </div>
-      </div>
-
-      <!-- Chart 6: Distribución Nivel Académico -->
-      <div class="chart-card">
-        <div class="chart-header">
-          <h3>Distribución por Nivel Académico</h3>
-          <span class="chart-desc">Matriculados por nivel de formación</span>
-        </div>
-        <div class="chart-wrapper">
-          <canvas id="chart-nivel-academico"></canvas>
-        </div>
+      <div class="iframe-ratio-container">
+        <iframe 
+          [src]="url"
+          class="powerbi-iframe"
+          frameborder="0"
+          allowFullScreen="true"
+          (load)="onIframeLoad()">
+        </iframe>
       </div>
     </div>
   </section>
 
-  <!-- DATA TABLE EXPLORER SECTION -->
-  <section class="explorer-section">
-    <div class="section-label">Explorador de Datos <small>Reporte consolidado del modelo</small></div>
-    
-    <div class="table-card">
-      <div class="table-toolbar">
-        <div class="search-box">
-          <span class="search-icon">🔍</span>
-          <input 
-            type="text" 
-            [(ngModel)]="searchText" 
-            (input)="applyFilters()" 
-            placeholder="Buscar por programa, facultad, depto..."
-          />
-        </div>
-        
-        <button class="export-btn" (click)="exportCSV()">
-          📥 Exportar CSV
-        </button>
+  <!-- INFO GUIDE SECTION -->
+  <section class="guide-section">
+    <div class="guide-grid">
+      <div class="guide-card">
+        <h3>🔍 Variables de Segmentación</h3>
+        <p>Dentro del reporte interactivo de Power BI, puedes utilizar los filtros y rebanadas para segmentar y analizar en tiempo real por:</p>
+        <ul>
+          <li><strong>Universidad / Sede:</strong> Sedes de la UNAL (Bogotá, Medellín, Manizales, Palmira, etc.).</li>
+          <li><strong>Periodo Académico:</strong> Histórico semestral (Año y Semestre 1/2).</li>
+          <li><strong>Facultad y Programa:</strong> Diferentes disciplinas y carreras académicas.</li>
+          <li><strong>Perfil Estudiantil:</strong> Nivel de formación (Pregrado/Posgrado), Sexo y Estrato socioeconómico.</li>
+          <li><strong>Geografía:</strong> Departamento de procedencia del estudiante.</li>
+        </ul>
       </div>
 
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th (click)="setSort('periodo')">
-                Periodo <span class="sort-indicator">{{ sortColumn === 'periodo' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
-              </th>
-              <th (click)="setSort('universidad')">
-                Sede <span class="sort-indicator">{{ sortColumn === 'universidad' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
-              </th>
-              <th (click)="setSort('programa')">
-                Programa <span class="sort-indicator">{{ sortColumn === 'programa' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
-              </th>
-              <th (click)="setSort('facultad')">
-                Facultad <span class="sort-indicator">{{ sortColumn === 'facultad' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
-              </th>
-              <th (click)="setSort('nivel')">
-                Nivel <span class="sort-indicator">{{ sortColumn === 'nivel' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
-              </th>
-              <th (click)="setSort('sexo')">
-                Sexo <span class="sort-indicator">{{ sortColumn === 'sexo' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
-              </th>
-              <th (click)="setSort('departamento')">
-                Procedencia <span class="sort-indicator">{{ sortColumn === 'departamento' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
-              </th>
-              <th class="num-col" (click)="setSort('total_matriculados')">
-                Matriculados <span class="sort-indicator">{{ sortColumn === 'total_matriculados' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
-              </th>
-              <th class="num-col" (click)="setSort('total_graduados')">
-                Graduados <span class="sort-indicator">{{ sortColumn === 'total_graduados' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            @if (paginatedRecords.length > 0) {
-              @for (row of paginatedRecords; track row) {
-                <tr>
-                  <td>{{ row.periodo }}</td>
-                  <td><span class="badge-sede">{{ row.universidad }}</span></td>
-                  <td class="text-highlight">{{ row.programa }}</td>
-                  <td>{{ row.facultad }}</td>
-                  <td>{{ row.nivel }}</td>
-                  <td>{{ row.sexo }}</td>
-                  <td>{{ row.departamento }}</td>
-                  <td class="num-col font-mono">{{ row.total_matriculados | number:'1.0-0' }}</td>
-                  <td class="num-col font-mono">{{ row.total_graduados | number:'1.0-0' }}</td>
-                </tr>
-              }
-            } @else {
-              <tr>
-                <td colspan="9" class="no-records">No se encontraron registros que coincidan con la búsqueda.</td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-
-      <div class="table-pagination">
-        <div class="pagination-info">
-          Mostrando {{ filteredRecords.length > 0 ? (currentPage - 1) * pageSize + 1 : 0 }} - 
-          {{ (currentPage * pageSize) > filteredRecords.length ? filteredRecords.length : (currentPage * pageSize) }} 
-          de {{ filteredRecords.length }} registros
-        </div>
-        
-        <div class="pagination-controls">
-          <button (click)="prevPage()" [disabled]="currentPage === 1" class="page-btn">
-            ◀ Anterior
-          </button>
-          <span class="page-number">Página <strong>{{ currentPage }}</strong> de {{ totalPages }}</span>
-          <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="page-btn">
-            Siguiente ▶
-          </button>
-        </div>
+      <div class="guide-card">
+        <h3>💡 Guía de Uso del Reporte</h3>
+        <ul>
+          <li><strong>Filtrado Cruzado:</strong> Haz clic en cualquier barra, columna o sector de gráfico dentro del reporte para filtrar automáticamente el resto del dashboard por esa categoría.</li>
+          <li><strong>Selección Múltiple:</strong> Mantén presionada la tecla <code>Ctrl</code> mientras haces clic en múltiples elementos para realizar selecciones combinadas.</li>
+          <li><strong>Limpiar Filtros:</strong> Haz clic en un área vacía de cualquier gráfica o utiliza el icono de borrador de filtros dentro del propio reporte de Power BI.</li>
+          <li><strong>Pantalla Completa:</strong> Puedes usar el botón de flechas dobles en la esquina inferior derecha del reporte para maximizar la visualización.</li>
+        </ul>
       </div>
     </div>
   </section>
@@ -331,7 +114,7 @@
   <!-- FOOTER -->
   <footer class="home-footer">
     <div class="footer-left">
-      <span>REPLICADOR DE TABLAS POWER BI</span>
+      <span>COMPAÑERO DE DASHBOARD POWER BI</span>
       <span class="divider">|</span>
       <span>ANÁLISIS ESTUDIANTIL INTEGRADO</span>
     </div>
