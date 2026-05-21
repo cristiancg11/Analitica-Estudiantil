@@ -52,6 +52,16 @@
         </div>
 
         <div class="filter-group">
+          <label>Semestre Académico</label>
+          <select [(ngModel)]="selectedSemestre" (change)="onFilterChange()">
+            <option value="">(Todos los Semestres)</option>
+            @for (sem of semestres; track sem) {
+              <option [value]="sem">Semestre {{ sem }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="filter-group">
           <label>Nivel de Formación</label>
           <select [(ngModel)]="selectedNivel" (change)="onFilterChange()">
             <option value="">(Todos los Niveles)</option>
@@ -77,6 +87,16 @@
             <option value="">(Todas las Facultades)</option>
             @for (fac of facultades; track fac) {
               <option [value]="fac">{{ fac }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Programa Académico</label>
+          <select [(ngModel)]="selectedPrograma" (change)="onFilterChange()">
+            <option value="">(Todos los Programas)</option>
+            @for (prog of availableProgramas; track prog) {
+              <option [value]="prog">{{ prog }}</option>
             }
           </select>
         </div>
@@ -146,14 +166,25 @@
       <div class="chart-card large-chart">
         <div class="chart-header">
           <h3>Evolución Histórica: Matriculados vs Graduados</h3>
-          <span class="chart-desc">Comparativa anual histórica agregada</span>
+          <span class="chart-desc">Comparativa semestral histórica agregada</span>
         </div>
         <div class="chart-wrapper">
           <canvas id="chart-matriculados-graduados"></canvas>
         </div>
       </div>
 
-      <!-- Chart 2: Tasa Deserción por Facultad -->
+      <!-- Chart 2: Brecha vs Tasa de Deserción por Periodo -->
+      <div class="chart-card large-chart">
+        <div class="chart-header">
+          <h3>Brecha y Tasa de Deserción por Periodo</h3>
+          <span class="chart-desc">Diferencia de matrícula y tasa de deserción estimada</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chart-brecha-tasa-periodo"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 3: Tasa Deserción por Facultad -->
       <div class="chart-card">
         <div class="chart-header">
           <h3>Tasa de Deserción por Facultad</h3>
@@ -164,25 +195,14 @@
         </div>
       </div>
 
-      <!-- Chart 3: Distribución Nivel Académico -->
-      <div class="chart-card">
-        <div class="chart-header">
-          <h3>Distribución por Nivel Académico</h3>
-          <span class="chart-desc">Matriculados por nivel de formación</span>
-        </div>
-        <div class="chart-wrapper">
-          <canvas id="chart-nivel-academico"></canvas>
-        </div>
-      </div>
-
-      <!-- Chart 4: Top 10 Programas -->
+      <!-- Chart 4: Tasa Deserción por Programa -->
       <div class="chart-card large-chart">
         <div class="chart-header">
-          <h3>Top 10 Programas por Matrícula</h3>
-          <span class="chart-desc">Programas con mayor número de estudiantes</span>
+          <h3>Tasa de Deserción por Programa</h3>
+          <span class="chart-desc">Programas con mayor tasa de deserción (Top 15)</span>
         </div>
         <div class="chart-wrapper">
-          <canvas id="chart-programas-estudiantes"></canvas>
+          <canvas id="chart-tasa-desercion-programa"></canvas>
         </div>
       </div>
 
@@ -197,14 +217,14 @@
         </div>
       </div>
 
-      <!-- Chart 6: Depto Procedencia -->
+      <!-- Chart 6: Distribución Nivel Académico -->
       <div class="chart-card">
         <div class="chart-header">
-          <h3>Departamento de Procedencia</h3>
-          <span class="chart-desc">Top 8 departamentos y otros consolidados</span>
+          <h3>Distribución por Nivel Académico</h3>
+          <span class="chart-desc">Matriculados por nivel de formación</span>
         </div>
         <div class="chart-wrapper">
-          <canvas id="chart-departamento-procedencia"></canvas>
+          <canvas id="chart-nivel-academico"></canvas>
         </div>
       </div>
     </div>
@@ -235,8 +255,8 @@
         <table>
           <thead>
             <tr>
-              <th (click)="setSort('anio')">
-                Año <span class="sort-indicator">{{ sortColumn === 'anio' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
+              <th (click)="setSort('periodo')">
+                Periodo <span class="sort-indicator">{{ sortColumn === 'periodo' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
               </th>
               <th (click)="setSort('universidad')">
                 Sede <span class="sort-indicator">{{ sortColumn === 'universidad' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
@@ -268,15 +288,15 @@
             @if (paginatedRecords.length > 0) {
               @for (row of paginatedRecords; track row) {
                 <tr>
-                  <td>{{ row.anio }}</td>
+                  <td>{{ row.periodo }}</td>
                   <td><span class="badge-sede">{{ row.universidad }}</span></td>
                   <td class="text-highlight">{{ row.programa }}</td>
                   <td>{{ row.facultad }}</td>
                   <td>{{ row.nivel }}</td>
                   <td>{{ row.sexo }}</td>
                   <td>{{ row.departamento }}</td>
-                  <td class="num-col font-mono">{{ row.total_matriculados | number }}</td>
-                  <td class="num-col font-mono">{{ row.total_graduados | number }}</td>
+                  <td class="num-col font-mono">{{ row.total_matriculados | number:'1.0-0' }}</td>
+                  <td class="num-col font-mono">{{ row.total_graduados | number:'1.0-0' }}</td>
                 </tr>
               }
             } @else {

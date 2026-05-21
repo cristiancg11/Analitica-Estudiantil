@@ -5,7 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { Chart } from 'chart.js/auto';
 
 interface RecordRow {
+  periodo: string;
   anio: string;
+  semestre: string;
   universidad: string;
   programa: string;
   facultad: string;
@@ -37,6 +39,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   // Filter lists
   universidades: string[] = [];
   anios: string[] = [];
+  semestres: string[] = [];
   facultades: string[] = [];
   programas: string[] = [];
   niveles: string[] = [];
@@ -46,6 +49,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   // Selected filters
   selectedUniversidad = '';
   selectedAnio = '';
+  selectedSemestre = '';
   selectedFacultad = '';
   selectedPrograma = '';
   selectedNivel = '';
@@ -70,7 +74,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   searchText = '';
   currentPage = 1;
   pageSize = 10;
-  sortColumn: keyof RecordRow = 'anio';
+  sortColumn: keyof RecordRow = 'periodo';
   sortDirection: 'asc' | 'desc' = 'asc';
 
   constructor(private router: Router) {}
@@ -104,10 +108,19 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       const parsedLines = this.parseCSV(csvText);
       
       if (parsedLines.length > 1) {
-        const headers = parsedLines[0];
         this.allRecords = parsedLines.slice(1).map(row => {
+          const periodo = row[0] || '';
+          const parts = periodo.split('-');
+          const anio = parts[0] || '';
+          const semestre = parts[1] || '';
+          
+          const total_matriculados = parseFloat(row[8] || '0') || 0;
+          const total_graduados = parseFloat(row[9] || '0') || 0;
+          
           return {
-            anio: row[0] || '',
+            periodo: periodo,
+            anio: anio,
+            semestre: semestre,
             universidad: row[1] || '',
             programa: row[2] || '',
             facultad: row[3] || '',
@@ -115,20 +128,21 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
             estrato: row[5] || '',
             sexo: row[6] || '',
             departamento: row[7] || '',
-            total_matriculados: parseInt(row[8] || '0', 10) || 0,
-            total_graduados: parseInt(row[9] || '0', 10) || 0,
-            tasa_graduacion: parseFloat(row[10] || '0') || 0,
-            balance_matricula_menos_graduacion: parseInt(row[11] || '0', 10) || 0,
-            hay_matricula: row[12] === 'true',
-            hay_graduacion: row[13] === 'true',
-            hay_matricula_y_graduacion: row[14] === 'true',
-            alerta_graduados_superan_matricula: row[15] === 'true',
+            total_matriculados: total_matriculados,
+            total_graduados: total_graduados,
+            tasa_graduacion: total_matriculados > 0 ? (total_graduados / total_matriculados) : 0,
+            balance_matricula_menos_graduacion: total_matriculados - total_graduados,
+            hay_matricula: total_matriculados > 0,
+            hay_graduacion: total_graduados > 0,
+            hay_matricula_y_graduacion: total_matriculados > 0 && total_graduados > 0,
+            alerta_graduados_superan_matricula: total_graduados > total_matriculados,
           };
         });
 
         // Populate filter dropdown lists from the entire dataset
         this.universidades = Array.from(new Set(this.allRecords.map(r => r.universidad))).filter(Boolean).sort();
         this.anios = Array.from(new Set(this.allRecords.map(r => r.anio))).filter(Boolean).sort();
+        this.semestres = Array.from(new Set(this.allRecords.map(r => r.semestre))).filter(Boolean).sort();
         this.facultades = Array.from(new Set(this.allRecords.map(r => r.facultad))).filter(Boolean).sort();
         this.programas = Array.from(new Set(this.allRecords.map(r => r.programa))).filter(Boolean).sort();
         this.niveles = Array.from(new Set(this.allRecords.map(r => r.nivel))).filter(Boolean).sort();
@@ -190,13 +204,31 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     return lines;
   }
 
+  get availableProgramas(): string[] {
+    if (this.selectedFacultad) {
+      return Array.from(new Set(
+        this.allRecords
+          .filter(r => r.facultad === this.selectedFacultad)
+          .map(r => r.programa)
+      )).filter(Boolean).sort();
+    }
+    return this.programas;
+  }
+
   onFilterChange() {
+    if (this.selectedFacultad) {
+      const avail = this.availableProgramas;
+      if (this.selectedPrograma && !avail.includes(this.selectedPrograma)) {
+        this.selectedPrograma = '';
+      }
+    }
     this.applyFilters();
   }
 
   clearFilters() {
     this.selectedUniversidad = '';
     this.selectedAnio = '';
+    this.selectedSemestre = '';
     this.selectedFacultad = '';
     this.selectedPrograma = '';
     this.selectedNivel = '';
@@ -211,6 +243,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       return (
         (!this.selectedUniversidad || r.universidad === this.selectedUniversidad) &&
         (!this.selectedAnio || r.anio === this.selectedAnio) &&
+        (!this.selectedSemestre || r.semestre === this.selectedSemestre) &&
         (!this.selectedFacultad || r.facultad === this.selectedFacultad) &&
         (!this.selectedPrograma || r.programa === this.selectedPrograma) &&
         (!this.selectedNivel || r.nivel === this.selectedNivel) &&
@@ -232,9 +265,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   updateKPIs() {
-    this.totalRegistros = this.filteredRecords.length;
-    this.totalMatriculados = this.filteredRecords.reduce((sum, r) => sum + r.total_matriculados, 0);
-    this.totalGraduados = this.filteredRecords.reduce((sum, r) => sum + r.total_graduados, 0);
+    this.totalMatriculados = Math.round(this.filteredRecords.reduce((sum, r) => sum + r.total_matriculados, 0));
+    this.totalGraduados = Math.round(this.filteredRecords.reduce((sum, r) => sum + r.total_graduados, 0));
+    this.totalRegistros = this.totalMatriculados + this.totalGraduados;
     
     if (this.totalMatriculados > 0) {
       this.tasaDesercionPromedio = Math.max(0, 100 - (this.totalGraduados / this.totalMatriculados * 100));
@@ -247,28 +280,47 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   updateCharts() {
     if (this.isLoading || this.allRecords.length === 0) return;
 
-    // --- Chart 1: Matriculados vs Graduados por Año ---
-    const yearMap = new Map<string, { matriculados: number, graduados: number }>();
+    // --- Chart 1: Evolución Histórica: Matriculados vs Graduados por Periodo ---
+    const pMap = new Map<string, { matriculados: number, graduados: number }>();
     this.filteredRecords.forEach(r => {
-      const current = yearMap.get(r.anio) || { matriculados: 0, graduados: 0 };
+      const current = pMap.get(r.periodo) || { matriculados: 0, graduados: 0 };
       current.matriculados += r.total_matriculados;
       current.graduados += r.total_graduados;
-      yearMap.set(r.anio, current);
+      pMap.set(r.periodo, current);
     });
-    const sortedYears = Array.from(yearMap.keys()).sort();
-    const matriculadosData = sortedYears.map(y => yearMap.get(y)!.matriculados);
-    const graduadosData = sortedYears.map(y => yearMap.get(y)!.graduados);
+    const sortedPeriodos = Array.from(pMap.keys()).sort();
+    const matriculadosData = sortedPeriodos.map(p => Math.round(pMap.get(p)!.matriculados));
+    const graduadosData = sortedPeriodos.map(p => Math.round(pMap.get(p)!.graduados));
 
     if (this.chart1) {
-      this.chart1.data.labels = sortedYears;
+      this.chart1.data.labels = sortedPeriodos;
       this.chart1.data.datasets[0].data = matriculadosData;
       this.chart1.data.datasets[1].data = graduadosData;
       this.chart1.update();
     } else {
-      this.chart1 = this.createLineChart('chart-matriculados-graduados', sortedYears, matriculadosData, graduadosData);
+      this.chart1 = this.createLineChart('chart-matriculados-graduados', sortedPeriodos, matriculadosData, graduadosData);
     }
 
-    // --- Chart 2: Tasa de Deserción por Facultad ---
+    // --- Chart 2: Brecha vs Tasa de Deserción por Periodo (Combo Chart) ---
+    const brechaData = sortedPeriodos.map(p => {
+      const d = pMap.get(p)!;
+      return Math.round(d.matriculados - d.graduados);
+    });
+    const tasaPeriodoData = sortedPeriodos.map(p => {
+      const d = pMap.get(p)!;
+      return d.matriculados > 0 ? parseFloat(Math.max(0, 100 - (d.graduados / d.matriculados * 100)).toFixed(2)) : 0;
+    });
+
+    if (this.chart2) {
+      this.chart2.data.labels = sortedPeriodos;
+      this.chart2.data.datasets[0].data = brechaData;
+      this.chart2.data.datasets[1].data = tasaPeriodoData;
+      this.chart2.update();
+    } else {
+      this.chart2 = this.createComboChart('chart-brecha-tasa-periodo', sortedPeriodos, brechaData, tasaPeriodoData);
+    }
+
+    // --- Chart 3: Tasa de Deserción por Facultad ---
     const facMap = new Map<string, { matriculados: number, graduados: number }>();
     this.filteredRecords.forEach(r => {
       if (!r.facultad) return;
@@ -282,50 +334,38 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       return { facultad, rate };
     }).sort((a, b) => b.rate - a.rate).slice(0, 10);
     const facLabels = facData.map(d => d.facultad);
-    const facRates = facData.map(d => d.rate);
-
-    if (this.chart2) {
-      this.chart2.data.labels = facLabels;
-      this.chart2.data.datasets[0].data = facRates;
-      this.chart2.update();
-    } else {
-      this.chart2 = this.createBarChartHorizontal('chart-tasa-desercion-facultad', 'Tasa Deserción (%)', facLabels, facRates, '#f03e3e');
-    }
-
-    // --- Chart 3: Distribución por Nivel Académico ---
-    const nivelMap = new Map<string, number>();
-    this.filteredRecords.forEach(r => {
-      if (!r.nivel) return;
-      nivelMap.set(r.nivel, (nivelMap.get(r.nivel) || 0) + r.total_matriculados);
-    });
-    const sortedNiveles = Array.from(nivelMap.entries()).sort((a, b) => b[1] - a[1]);
-    const nivelLabels = sortedNiveles.map(n => n[0]);
-    const nivelValues = sortedNiveles.map(n => n[1]);
+    const facRates = facData.map(d => parseFloat(d.rate.toFixed(2)));
 
     if (this.chart3) {
-      this.chart3.data.labels = nivelLabels;
-      this.chart3.data.datasets[0].data = nivelValues;
+      this.chart3.data.labels = facLabels;
+      this.chart3.data.datasets[0].data = facRates;
       this.chart3.update();
     } else {
-      this.chart3 = this.createDoughnutChart('chart-nivel-academico', nivelLabels, nivelValues);
+      this.chart3 = this.createBarChartHorizontal('chart-tasa-desercion-facultad', 'Tasa Deserción (%)', facLabels, facRates, '#f03e3e');
     }
 
-    // --- Chart 4: Top 10 Programas con más Estudiantes ---
-    const progMap = new Map<string, number>();
+    // --- Chart 4: Tasa de Deserción por Programa (Top 15) ---
+    const progMap = new Map<string, { matriculados: number, graduados: number }>();
     this.filteredRecords.forEach(r => {
       if (!r.programa) return;
-      progMap.set(r.programa, (progMap.get(r.programa) || 0) + r.total_matriculados);
+      const current = progMap.get(r.programa) || { matriculados: 0, graduados: 0 };
+      current.matriculados += r.total_matriculados;
+      current.graduados += r.total_graduados;
+      progMap.set(r.programa, current);
     });
-    const sortedProgs = Array.from(progMap.entries()).sort((a, b) => b[1] - a[1]).slice(0, 10);
-    const progLabels = sortedProgs.map(p => p[0]);
-    const progValues = sortedProgs.map(p => p[1]);
+    const progData = Array.from(progMap.entries()).map(([programa, data]) => {
+      const rate = data.matriculados > 0 ? Math.max(0, 100 - (data.graduados / data.matriculados * 100)) : 0;
+      return { programa, rate };
+    }).sort((a, b) => b.rate - a.rate).slice(0, 15);
+    const progLabels = progData.map(d => d.programa);
+    const progRates = progData.map(d => parseFloat(d.rate.toFixed(2)));
 
     if (this.chart4) {
       this.chart4.data.labels = progLabels;
-      this.chart4.data.datasets[0].data = progValues;
+      this.chart4.data.datasets[0].data = progRates;
       this.chart4.update();
     } else {
-      this.chart4 = this.createBarChartHorizontal('chart-programas-estudiantes', 'Matriculados', progLabels, progValues, '#22b8cf');
+      this.chart4 = this.createBarChartHorizontal('chart-tasa-desercion-programa', 'Tasa Deserción (%)', progLabels, progRates, '#fab005');
     }
 
     // --- Chart 5: Distribución de Estudiantes por Sexo ---
@@ -336,7 +376,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     const sortedSexos = Array.from(sexoMap.entries()).sort((a, b) => b[1] - a[1]);
     const sexoLabels = sortedSexos.map(s => s[0]);
-    const sexoValues = sortedSexos.map(s => s[1]);
+    const sexoValues = sortedSexos.map(s => Math.round(s[1]));
 
     if (this.chart5) {
       this.chart5.data.labels = sexoLabels;
@@ -346,35 +386,22 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.chart5 = this.createDoughnutChart('chart-sexo-estudiantes', sexoLabels, sexoValues);
     }
 
-    // --- Chart 6: Estudiantes por Departamento de Procedencia ---
-    const deptMap = new Map<string, number>();
+    // --- Chart 6: Distribución por Nivel Académico ---
+    const nivelMap = new Map<string, number>();
     this.filteredRecords.forEach(r => {
-      if (!r.departamento) return;
-      deptMap.set(r.departamento, (deptMap.get(r.departamento) || 0) + r.total_matriculados);
+      if (!r.nivel) return;
+      nivelMap.set(r.nivel, (nivelMap.get(r.nivel) || 0) + r.total_matriculados);
     });
-    const sortedDepts = Array.from(deptMap.entries()).sort((a, b) => b[1] - a[1]);
-    let deptLabels: string[] = [];
-    let deptValues: number[] = [];
-    if (sortedDepts.length > 8) {
-      const topDepts = sortedDepts.slice(0, 7);
-      const othersVal = sortedDepts.slice(7).reduce((sum, d) => sum + d[1], 0);
-      deptLabels = topDepts.map(d => d[0]);
-      deptValues = topDepts.map(d => d[1]);
-      if (othersVal > 0) {
-        deptLabels.push('Otros');
-        deptValues.push(othersVal);
-      }
-    } else {
-      deptLabels = sortedDepts.map(d => d[0]);
-      deptValues = sortedDepts.map(d => d[1]);
-    }
+    const sortedNiveles = Array.from(nivelMap.entries()).sort((a, b) => b[1] - a[1]);
+    const nivelLabels = sortedNiveles.map(n => n[0]);
+    const nivelValues = sortedNiveles.map(n => Math.round(n[1]));
 
     if (this.chart6) {
-      this.chart6.data.labels = deptLabels;
-      this.chart6.data.datasets[0].data = deptValues;
+      this.chart6.data.labels = nivelLabels;
+      this.chart6.data.datasets[0].data = nivelValues;
       this.chart6.update();
     } else {
-      this.chart6 = this.createDoughnutChart('chart-departamento-procedencia', deptLabels, deptValues);
+      this.chart6 = this.createDoughnutChart('chart-nivel-academico', nivelLabels, nivelValues);
     }
   }
 
@@ -429,23 +456,23 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           {
             label: 'Matriculados',
             data: dataMatriculados,
-            borderColor: '#f03e3e',
-            backgroundColor: 'rgba(240, 62, 62, 0.15)',
-            borderWidth: 3,
-            fill: true,
-            tension: 0.3,
-            pointBackgroundColor: '#f03e3e',
-            pointHoverRadius: 7
-          },
-          {
-            label: 'Graduados',
-            data: dataGraduados,
             borderColor: '#22b8cf',
             backgroundColor: 'rgba(34, 184, 207, 0.15)',
             borderWidth: 3,
             fill: true,
             tension: 0.3,
             pointBackgroundColor: '#22b8cf',
+            pointHoverRadius: 7
+          },
+          {
+            label: 'Graduados',
+            data: dataGraduados,
+            borderColor: '#be4bdb',
+            backgroundColor: 'rgba(190, 75, 219, 0.15)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.3,
+            pointBackgroundColor: '#be4bdb',
             pointHoverRadius: 7
           }
         ]
@@ -454,12 +481,105 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  createComboChart(elementId: string, labels: string[], brechaData: number[], tasaData: number[]): Chart {
+    const ctx = document.getElementById(elementId) as HTMLCanvasElement;
+    if (!ctx) return null as any;
+
+    return new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            type: 'bar',
+            label: 'Brecha (Matriculados - Graduados)',
+            data: brechaData,
+            backgroundColor: 'rgba(34, 184, 207, 0.35)',
+            borderColor: '#22b8cf',
+            borderWidth: 1,
+            borderRadius: 4,
+            barThickness: 16,
+            yAxisID: 'y'
+          },
+          {
+            type: 'line',
+            label: 'Tasa Deserción (%)',
+            data: tasaData,
+            borderColor: '#f03e3e',
+            backgroundColor: 'rgba(240, 62, 62, 0.15)',
+            borderWidth: 3,
+            fill: false,
+            tension: 0.3,
+            pointBackgroundColor: '#f03e3e',
+            pointHoverRadius: 7,
+            yAxisID: 'y2'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: {
+              color: '#a5d8ff',
+              font: { family: 'DM Sans, sans-serif', size: 11 }
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(20, 21, 30, 0.95)',
+            titleColor: '#fff',
+            bodyColor: '#a5d8ff',
+            borderColor: 'rgba(240, 62, 62, 0.25)',
+            borderWidth: 1,
+            padding: 10,
+            titleFont: { family: 'DM Sans, sans-serif', weight: 'bold' },
+            bodyFont: { family: 'DM Mono, monospace' }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: { color: '#a5d8ff', font: { family: 'DM Sans, sans-serif' } }
+          },
+          y: {
+            type: 'linear' as const,
+            position: 'left' as const,
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: { color: '#a5d8ff', font: { family: 'DM Sans, sans-serif' } },
+            title: {
+              display: true,
+              text: 'Brecha (Estudiantes)',
+              color: '#a5d8ff',
+              font: { family: 'DM Sans, sans-serif' }
+            }
+          },
+          y2: {
+            type: 'linear' as const,
+            position: 'right' as const,
+            grid: { drawOnChartArea: false },
+            ticks: {
+              color: '#ffc9c9',
+              font: { family: 'DM Sans, sans-serif' },
+              callback: function(value) { return value + '%'; }
+            },
+            title: {
+              display: true,
+              text: 'Tasa Deserción (%)',
+              color: '#ffc9c9',
+              font: { family: 'DM Sans, sans-serif' }
+            }
+          }
+        }
+      }
+    });
+  }
+
   createBarChartHorizontal(elementId: string, label: string, labels: string[], data: number[], color: string): Chart {
     const ctx = document.getElementById(elementId) as HTMLCanvasElement;
     if (!ctx) return null as any;
 
     const options: any = this.getCommonOptions();
-    // Configure horizontal bars
     options.indexAxis = 'y';
 
     return new Chart(ctx, {
@@ -474,7 +594,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
             borderColor: 'rgba(255, 255, 255, 0.1)',
             borderWidth: 1,
             borderRadius: 4,
-            barThickness: 12
+            barThickness: 10
           }
         ]
       },
@@ -597,7 +717,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   exportCSV() {
     const headers = [
-      'Anio', 'Universidad', 'Programa', 'Facultad', 'Nivel', 
+      'Periodo', 'Universidad', 'Programa', 'Facultad', 'Nivel', 
       'Estrato', 'Sexo', 'Departamento', 'Total Matriculados', 'Total Graduados'
     ];
     
@@ -605,7 +725,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     
     this.filteredRecords.forEach(r => {
       const row = [
-        r.anio,
+        r.periodo,
         `"${r.universidad.replace(/"/g, '""')}"`,
         `"${r.programa.replace(/"/g, '""')}"`,
         `"${r.facultad.replace(/"/g, '""')}"`,
