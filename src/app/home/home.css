@@ -333,7 +333,7 @@
 
 /* ── SUMMARY TABLES SECTION ── */
 .summary-tables-section {
-  margin-bottom: 48px;
+  margin-bottom: 40px;
 }
 
 .summary-tables-grid {
@@ -471,6 +471,60 @@
   color: var(--text2);
 }
 
+/* ── SUMMARY CHARTS SECTION ── */
+.summary-charts-section {
+  margin-bottom: 48px;
+}
+
+.summary-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.summary-chart-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.summary-chart-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.chart-header-simple {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+}
+
+.chart-header-simple h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.chart-desc-simple {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+.chart-wrapper-simple {
+  position: relative;
+  height: 200px;
+  width: 100%;
+}
+
 /* ── GUIDE / DOCS SECTION ── */
 .guide-section {
   margin-bottom: 48px;
@@ -564,6 +618,9 @@
 
 @media(max-width: 992px) {
   .summary-tables-grid {
+    grid-template-columns: 1fr;
+  }
+  .summary-charts-grid {
     grid-template-columns: 1fr;
   }
 }
