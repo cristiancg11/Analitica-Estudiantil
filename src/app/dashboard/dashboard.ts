@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit {
   constructor(private router: Router, private sanitizer: DomSanitizer) {}
 
   ngOnInit() {
-    const powerBiUrl = 'https://app.powerbi.com/view?r=eyJrIjoiZTEzYjI1NWMtNzkxMy00NzRjLWIyOTEtNjc3MDAyNTMzMDA2IiwidCI6IjhkMzY4MzZlLTZiNzUtNGRlNi1iYWI5LTVmNGIxNzc1NDI3ZiIsImMiOjR9';
+    const powerBiUrl = 'https://app.powerbi.com/view?r=eyJrIjoiY2IwM2NlNTgtZjViNy00OTlhLWJlMTctNjM5MGRiMGRmODlkIiwidCI6IjhkMzY4MzZlLTZiNzUtNGRlNi1iYWI5LTVmNGIxNzc1NDI3ZiIsImMiOjR9';
     this.url = this.sanitizer.bypassSecurityTrustResourceUrl(powerBiUrl);
   }
 
